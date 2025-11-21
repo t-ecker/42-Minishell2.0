@@ -1,6 +1,53 @@
 #include "../includes/minishell.h"
 
-int main(void)
+void check_args(int argc, char **argv, char **envp)
 {
-	printf("asd");
+	(void)argv;
+
+	if (argc != 1)
+	{
+		ft_putendl_fd("Invalid input", 2);
+		exit(1);
+	}
+	// TODO:
+	// check envp
+}
+
+void reset(t_shell *shell)
+{
+	shell->input = NULL;
+	shell->exit_code = 0;
+}
+
+void loop(t_shell *shell)
+{
+	while(1)
+	{
+		reset(shell);
+		// ?
+		// set_signals
+		if (get_input(shell))
+			return ;
+		if (input_validation(shell))
+		{
+			free_shell(shell);
+			continue ;
+		}
+		// lexer(shell);
+		// parser(shell);
+		// execute(shell);
+		// free_shell(shell);
+	}
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	t_shell shell;
+	check_args(argc, argv, envp);
+	// TODO:
+	// create_env(&shell, envp);
+	update_shellLVL(&shell);
+	loop(&shell);
+	// free_env();
+	return(0);
 }
