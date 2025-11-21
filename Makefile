@@ -1,0 +1,68 @@
+NAME = minishell
+NAME_BONUS = minishell_bonus
+
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+CFLAGS = -Wall -Werror -Wextra
+CC = cc
+
+
+SRC =		./src/main.c \
+
+# SRC_BONUS =	./src/
+
+OBJ_DIR = ./obj
+SRC_DIR = ./src
+
+OBJ_FILES		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+# OBJ_FILES_BONUS	=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_BONUS))
+
+all: $(NAME)
+	clear;
+	@$(MAKE) loading
+	clear;
+
+$(NAME): $(LIBFT) $(OBJ_FILES)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(LIBFT):	$(LIBFT_DIR)/.git
+	@make extra -C $(LIBFT_DIR)
+
+$(LIBFT_DIR)/.git:
+	@echo "\033[33mInitializing Libft submodule...\033[0m"
+	@git submodule update --init --recursive
+	@echo "\033[32mLibft submodule initialized.\033[0m"
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# bonus:	$(NAME_BONUS)
+# 	clear;
+# 	@$(MAKE) loading
+# 	clear;
+
+# $(NAME_BONUS):	$(LIBFT) $(OBJ_FILES_BONUS) 
+# 	$(CC) $(CFLAGS) $^ -o $@
+
+clean:
+	@rm -rf $(OBJ_DIR)
+	@make clean -C $(LIBFT_DIR)
+
+fclean: clean
+	@rm -f $(NAME) $(NAME_BONUS)
+	@make fclean -C $(LIBFT_DIR)
+
+re: fclean all
+
+loading:
+	@for i in {1..42}; do \
+		printf '%s' "█"; \
+		sleep 0.01; \
+	done
+
+.PHONY: all clean fclean re loading bonus
