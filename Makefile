@@ -5,10 +5,20 @@ LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 CFLAGS = -Wall -Werror -Wextra
+LDFLAGS = -lreadline
 CC = cc
 
 
 SRC =		./src/main.c \
+			./src/input/get_input.c \
+			./src/input/input_validation.c \
+			./src/input/validate_andOperator_pipes.c \
+			./src/input/validate_parentheses.c \
+			./src/input/validate_quotes.c \
+			./src/input/validate_redirection.c \
+			./src/utils/errors.c \
+			./src/utils/free.c \
+			./src/utils/utils.c
 
 # SRC_BONUS =	./src/
 
@@ -24,7 +34,7 @@ all: $(NAME)
 	clear;
 
 $(NAME): $(LIBFT) $(OBJ_FILES)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(OBJ_FILES) $(LIBFT) $(LDFLAGS) -o $@
 
 $(LIBFT):	$(LIBFT_DIR)/.git
 	@make extra -C $(LIBFT_DIR)

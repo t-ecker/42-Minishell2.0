@@ -20,9 +20,27 @@ typedef struct s_shell
 # include "errors.h"
 
 void free_shell(t_shell *shell);
-int input_validation(t_shell *shell);
-int get_input(t_shell *shell);
+
+
+
 void exit_code(t_shell *shell, int code);
+
+
+
+int input_validation(t_shell *shell);
+int check_quotes(char *str);
+int check_redir(char *str);
+int check_parentheses(char *str);
+int check_pipes(char *str);
+int check_and_operator(char *str);
+
+int get_input(t_shell *shell);
+bool is_special_char(char c);
+void skip_quotes(char *str, int *pos);
+void skip_spaces(char *str, int *pos);
+void toggleBool(bool *input);
+void toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote);
+
 // void free_env(idk)
 
 # endif
