@@ -1,4 +1,4 @@
-# include "minishell.h"
+# include "../../includes/minishell.h"
 
 int get_input(t_shell *shell)
 {
