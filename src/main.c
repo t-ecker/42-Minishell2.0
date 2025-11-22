@@ -11,6 +11,7 @@ void check_args(int argc, char **argv, char **envp)
 	}
 	// TODO:
 	// check envp
+	(void) envp;
 }
 
 void reset(t_shell *shell)
@@ -31,8 +32,11 @@ void loop(t_shell *shell)
 		if (input_validation(shell))
 		{
 			free_shell(shell);
+			ft_putendl_fd("input: ❌", 1);
 			continue ;
 		}
+		if (!ft_strncmp(shell->input, "exit", ft_strlen(shell->input)))
+			return (free_shell(shell));
 		// lexer(shell);
 		// parser(shell);
 		// execute(shell);
@@ -46,7 +50,7 @@ int main(int argc, char **argv, char **envp)
 	check_args(argc, argv, envp);
 	// TODO:
 	// create_env(&shell, envp);
-	update_shellLVL(&shell);
+	// update_shellLVL(&shell);
 	loop(&shell);
 	// free_env();
 	return(0);
