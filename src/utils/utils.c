@@ -25,11 +25,9 @@ void skip_quotes(char *str, int *pos)
 	}
 }
 
-#include <ctype.h> //correct LIBFT function for isspace
-
 void skip_spaces(char *str, int *pos)
 {
-	while(str[*pos] && isspace(str[*pos])) 
+	while(str[*pos] && ft_isspace(str[*pos]))
 		(*pos)++;
 }
 
