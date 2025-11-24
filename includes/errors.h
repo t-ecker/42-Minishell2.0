@@ -3,11 +3,13 @@
 
 # define FATAL_ERROR "minishell: fatal error: "
 # define MALLOC_ERROR "malloc failed"
+# define READLINE_ERROR "readline failed"
 
 
 # define SYNTAX_ERROR "minishell: syntax error"
 # define SYNTAX_PIPE_ERROR " near unexpected token `|'"
-# define SYNTAX_QUOTE_ERROR ": unexpected end of file"
+# define SYNTAX_QUOTE_ERROR "minishell: unexpected EOF while looking for \
+matching `'/\"'\nminishell: syntax error: unexpected end of file"
 // # define SYNTAX_OUTPUT_ERROR " near unexpected token `<'"
 // # define SYNTAX_INPUT_ERROR " near unexpected token `>'"
 # define SYNTAX_PAREN_ERROR ": unexpected end of file"

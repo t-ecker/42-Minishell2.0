@@ -11,10 +11,13 @@ void syntax_error_unexpected_token(char c)
 
 void syntax_error(char *str)
 {
-	ft_putstr_fd(SYNTAX_ERROR, 2);
+	if (ft_strncmp(str, SYNTAX_QUOTE_ERROR, ft_strlen(SYNTAX_QUOTE_ERROR)))
+		ft_putstr_fd(SYNTAX_ERROR, 2);
 	ft_putendl_fd(str, 2);
 }
 
+
+//needs to free everything everytime
 void fatal_error(t_shell *shell, char *msg)
 {
 	// free_env(shell->env);
