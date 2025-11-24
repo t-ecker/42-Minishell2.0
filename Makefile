@@ -18,7 +18,10 @@ SRC =		./src/main.c \
 			./src/input/validate_redirection.c \
 			./src/utils/errors.c \
 			./src/utils/free.c \
-			./src/utils/utils.c
+			./src/utils/utils.c \
+			./src/utils/list_utils.c \
+			./src/lexer/lexer.c \
+			./src/debug/token_debug.c \
 
 # SRC_BONUS =	./src/
 
