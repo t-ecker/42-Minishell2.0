@@ -17,6 +17,7 @@ void check_args(int argc, char **argv, char **envp)
 void reset(t_shell *shell)
 {
 	shell->input = NULL;
+	shell->tokens = NULL;
 	shell->exit_code = 0;
 }
 
@@ -27,20 +28,20 @@ void loop(t_shell *shell)
 		reset(shell);
 		// ?
 		// set_signals
-		if (get_input(shell))
-			return ;
+		get_input(shell);
 		if (input_validation(shell))
 		{
 			free_shell(shell);
-			ft_putendl_fd("input: ❌", 1);
+			ft_putendl_fd("valid input: ❌", 1);
 			continue ;
 		}
 		if (!ft_strncmp(shell->input, "exit", ft_strlen(shell->input)))
 			return (free_shell(shell));
-		// lexer(shell);
+		lexer(shell);
+		print_tokens(shell->tokens);
 		// parser(shell);
 		// execute(shell);
-		// free_shell(shell);
+		free_shell(shell);
 	}
 }
 
