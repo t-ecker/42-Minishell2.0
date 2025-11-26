@@ -14,6 +14,7 @@ typedef struct s_shell t_shell;
 
 # include "errors.h"
 # include "lexer.h"
+# include "parser.h"
 
 typedef struct s_shell
 {
