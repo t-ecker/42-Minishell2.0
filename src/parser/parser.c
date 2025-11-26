@@ -4,9 +4,7 @@ t_astNode *create_astNode(t_astNodeType type, t_parser *p)
 {
 	t_astNode *node;
 	
-	node = malloc(sizeof(t_astNode));
-	if (!node)
-		fatal_error(p->shell, MALLOC_ERROR);
+	node = gc_malloc(p->shell, sizeof(t_astNode));
 	node->type = type;
 	ft_memset(&node->u_data, 0, sizeof(node->u_data));
 	return (node);
@@ -16,12 +14,8 @@ t_argList *create_args_node(char *value, t_parser *p)
 {
 	t_argList *node;
 	
-	node = malloc(sizeof(t_argList));
-	if (!node)
-		fatal_error(p->shell, MALLOC_ERROR);
-	node->value = ft_strdup(value);
-	if (!node->value)
-		fatal_error(p->shell, MALLOC_ERROR);
+	node = gc_malloc(p->shell, sizeof(t_argList));
+	node->value = gc_add(p->shell, ft_strdup(value));
 	node->next = NULL;
 	return (node);
 }
@@ -47,13 +41,9 @@ t_redirectList *create_redir_node(t_redirectType type, char *target, t_parser *p
 {
 	t_redirectList *node;
 	
-	node = malloc(sizeof(t_redirectList));
-	if (!node)
-		fatal_error(p->shell, MALLOC_ERROR);
+	node = gc_malloc(p->shell, sizeof(t_redirectList));
 	node->type = type;
-	node->target = ft_strdup(target);
-	if (!node->target)
-		fatal_error(p->shell, MALLOC_ERROR);
+	node->target = gc_add(p->shell, ft_strdup(target));
 	node->next = NULL;
 	return (node);
 }
@@ -79,9 +69,7 @@ t_pipelineList *create_pipe_node(t_astNode *command, t_parser *p)
 {
 	t_pipelineList *node;
 	
-	node = malloc(sizeof(t_pipelineList));
-	if (!node)
-		fatal_error(p->shell, MALLOC_ERROR);
+	node = gc_malloc(p->shell, sizeof(t_pipelineList));
 	node->command = command;
 	node->next = NULL;
 	return (node);

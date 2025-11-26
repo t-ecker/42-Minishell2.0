@@ -17,11 +17,11 @@ void syntax_error(char *str)
 }
 
 
-//needs to free everything everytime
+//needs to free everything at any time
 void fatal_error(t_shell *shell, char *msg)
 {
+	gc_destroy(shell);
 	// free_env(shell->env);
-	free_shell(shell);
 	ft_putstr_fd(FATAL_ERROR, 2);
 	ft_putendl_fd(msg, 2);
 	exit(1);

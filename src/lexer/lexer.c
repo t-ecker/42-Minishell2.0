@@ -57,11 +57,8 @@ void check_word(char *str, int *pos, t_tokenList *list, t_shell *shell)
 		}
 		end++;
 	}
-	value = ft_substr(str, *pos, end - *pos);
-	if (!value)
-		fatal_error(shell, MALLOC_ERROR);
+	value = gc_add(shell, ft_substr(str, *pos, end - *pos));
 	add_token(list, TOKEN_WORD, value, shell);
-	free(value);
 	*pos = end;
 }
 

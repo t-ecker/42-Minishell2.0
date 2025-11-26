@@ -2,13 +2,7 @@
 
 int input_validation(t_shell *shell)
 {
-	char	*tmp;
-	
-	tmp = shell->input;
-	shell->input = ft_strtrim(shell->input, " \t");
-	free(tmp);
-	if (!shell->input)
-		fatal_error(shell, MALLOC_ERROR);
+	shell->input = gc_add(shell, ft_strtrim(shell->input, " \t"));
 	if (shell->input[0] == '\0')
 		return (1);
 	if (check_quotes(shell->input))
@@ -21,6 +15,6 @@ int input_validation(t_shell *shell)
 		return (exit_code(shell, 258), 1);
 	if (check_and_operator(shell->input))
 		return (exit_code(shell, 258), 1);
-	ft_putendl_fd("valid input: ✅", 1);
+	ft_putendl_fd("valid input: ✅", 1); //debug
 	return (0);
 }
