@@ -15,9 +15,6 @@ matching `'/\"'\nminishell: syntax error: unexpected end of file"
 # define SYNTAX_PAREN_ERROR ": unexpected end of file"
 # define SYNTAX_REDIR_EOF_ERROR " near unexpected token `newline'"
 
-#include "minishell.h"
-
-
 void syntax_error(char *str);
 void syntax_error_unexpected_token(char c);
 void fatal_error(t_shell *shell, char *msg);
