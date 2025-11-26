@@ -1,5 +1,27 @@
 #include "../../includes/minishell.h"
 
+void add_token(t_tokenList *list, t_tokenType type, char *value, t_shell *shell)
+{
+    t_token *token;
+	t_token *current;
+	
+	token = gc_malloc(shell, sizeof(t_token));
+    token->type = type;
+    token->value = gc_add(shell, ft_strdup(value));
+    token->next = NULL;
+    
+    if (list->head == NULL)
+        list->head = token;
+    else
+	{
+        current = list->head;
+        while (current->next != NULL)
+            current = current->next;
+        current->next = token;
+    }
+    list->size++;
+}
+
 int check_double_char_operators(char *str, int *pos, t_tokenList *list, t_shell *shell)
 {
 	char a;
@@ -68,8 +90,11 @@ void lexer(t_shell *shell)
 	char *str;
 	t_tokenList *tokens;
 
+	tokens = gc_malloc(shell, sizeof(t_tokenList));
+    tokens->head = NULL;
+    tokens->size = 0;
+	
 	pos = 0;
-	tokens = create_tokenList(shell);
 	str = shell->input;
 	while (str[pos])
 	{
@@ -82,5 +107,3 @@ void lexer(t_shell *shell)
 	add_token(tokens, TOKEN_EOF, "", shell);
 	shell->tokens = tokens;
 }
-
-// rename function

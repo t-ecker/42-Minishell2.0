@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-const char* token_type_to_string(TokenType type)
+const char* token_type_to_string(t_tokenType type)
 {
     switch (type)
 	{
