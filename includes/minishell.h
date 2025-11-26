@@ -22,7 +22,7 @@ typedef struct s_shell
 	t_gc *gc;
 	char *input;
 	int exit_code;
-	char *env;	// env can be other type idk
+	char *env;	// env could be other type idk
 	t_tokenList *tokens;
 } t_shell;
 
@@ -49,9 +49,7 @@ void exit_code(t_shell *shell, int code);
 void add_token(t_tokenList *list, TokenType type, char *value, t_shell *shell);
 t_tokenList* create_tokenList(t_shell *shell);
 
-void free_shell(t_shell *shell);
-void free_tokens(t_tokenList *tokens);
-// void free_env(idk)\
+// void free_env(idk)
 
 
 // lexer
