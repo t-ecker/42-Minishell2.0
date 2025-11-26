@@ -58,7 +58,7 @@ t_redirectList *create_redir_node(t_redirectType type, char *target, t_parser *p
 	return (node);
 }
 
-void add_arg_node(t_redirectList **head, t_redirectType type, char *target, t_parser *p)
+void add_redir_node(t_redirectList **head, t_redirectType type, char *target, t_parser *p)
 {
 	t_redirectList *node;
 	t_redirectList *current_node;
@@ -75,7 +75,7 @@ void add_arg_node(t_redirectList **head, t_redirectType type, char *target, t_pa
 	}
 }
 
-t_pipelineNode *create_pipe_node(t_astNode *command, t_parser *p)
+t_pipelineList *create_pipe_node(t_astNode *command, t_parser *p)
 {
 	t_pipelineList *node;
 	
@@ -87,7 +87,7 @@ t_pipelineNode *create_pipe_node(t_astNode *command, t_parser *p)
 	return (node);
 }
 
-void add_arg_node(t_pipelineList **head, t_astNode *command, t_parser *p)
+void add_pipe_node(t_pipelineList **head, t_astNode *command, t_parser *p)
 {
 	t_pipelineList *node;
 	t_pipelineList *current_node;
@@ -106,7 +106,7 @@ void add_arg_node(t_pipelineList **head, t_astNode *command, t_parser *p)
 
 
 
-int parser(t_shell *shell)
-{
+// int parser(t_shell *shell)
+// {
 
-}
+// }
