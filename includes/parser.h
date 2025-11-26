@@ -10,7 +10,6 @@ typedef struct s_astNode t_astNode;
 typedef struct s_parser
 {
 	t_shell *shell;
-	t_tokenList	*tokens;
 	t_token		*current_token;
 }	t_parser;
 
@@ -53,18 +52,18 @@ typedef struct s_pipelineNode
     t_pipelineList *commands;
 } t_pipelineNode;
 
-typedef enum s_binaryOpType
+typedef enum s_logicalOpType
 {
-    BINOP_AND,
-    BINOP_OR
-} t_binaryOpType;
+    LOG_OP_AND,
+    LOG_OP_OR
+} t_logicalOpType;
 
-typedef struct s_binaryOpNode
+typedef struct s_logicalOpNode
 {
-    t_binaryOpType op_type;
+    t_logicalOpType op_type;
     t_astNode *left;
     t_astNode *right;
-} t_binaryOpNode;
+} t_logicalOpNode;
 
 typedef struct s_subshellNode
 {
@@ -74,8 +73,8 @@ typedef struct s_subshellNode
 typedef enum t_astNodeType
 {
     AST_COMMAND,
-    AST_PIPELINE,
-    AST_BINARY_OP,
+    AST_PIPE,
+    AST_LOGICAL_OP,
 	AST_SUBSHELL
 } t_astNodeType;
 
@@ -86,13 +85,30 @@ typedef struct s_astNode
 	{
 		t_commandNode command;
 		t_pipelineNode pipeline;
-		t_binaryOpNode binary_op;
+		t_logicalOpNode logical_op;
 		t_subshellNode subshell;
 	}	u_data;
 } t_astNode;
 
 // union shares memory for all node type structs. size is largest member, but all other members could fit as well.
 // Only one member is active, determined by ASTNode.type (need to be carefull).
+
+// utils
+bool check_token_type(t_parser *p, t_tokenType type);
+void advance_token(t_parser *p);
+t_astNode *create_astNode(t_astNodeType type, t_parser *p);
+
+t_astNode *parse_logical(t_parser *p);
+t_astNode *parse_subshell(t_parser *p);
+t_astNode *parse_pipe(t_parser *p);
+t_astNode *parse_cmd(t_parser *p);
+void handle_redirection(t_redirectList **head, t_parser *p);
+
+
+
+
+
+
 
 
 # endif

@@ -1,5 +1,6 @@
 # include "../../includes/minishell.h"
 
+// utils -----
 t_astNode *create_astNode(t_astNodeType type, t_parser *p)
 {
 	t_astNode *node;
@@ -10,91 +11,33 @@ t_astNode *create_astNode(t_astNodeType type, t_parser *p)
 	return (node);
 }
 
-t_argList *create_args_node(char *value, t_parser *p)
+void advance_token(t_parser *p)
 {
-	t_argList *node;
-	
-	node = gc_malloc(p->shell, sizeof(t_argList));
-	node->value = gc_add(p->shell, ft_strdup(value));
-	node->next = NULL;
-	return (node);
+	if (p->current_token)
+		p->current_token = p->current_token->next;
 }
 
-void add_arg_node(t_argList **head, char *value, t_parser *p)
+bool check_token_type(t_parser *p, t_tokenType type)
 {
-	t_argList *node;
-	t_argList *current_node;
-	
-	node = create_args_node(value, p);
-	if (*head == NULL)
-		*head = node;
-	else
-	{
-		current_node = *head;
-		while(current_node->next)
-			current_node = current_node->next;
-		current_node->next = node;
-	}
+	return (p->current_token && p->current_token->type == type);
 }
+// -----
 
-t_redirectList *create_redir_node(t_redirectType type, char *target, t_parser *p)
+// recursive descent parser
+// parser assumes valid syntax (checked by validator)
+
+// PRECEDENCE:
+// - Redirects and arguments
+// - Pipes
+// - Logical OR / AND
+
+void parser(t_shell *shell)
 {
-	t_redirectList *node;
+	t_parser *p;
 	
-	node = gc_malloc(p->shell, sizeof(t_redirectList));
-	node->type = type;
-	node->target = gc_add(p->shell, ft_strdup(target));
-	node->next = NULL;
-	return (node);
+	p = gc_malloc(shell, sizeof(t_parser));
+	p->shell = shell;
+	p->current_token = shell->tokens->head;
+
+	shell->ast = parse_logical(p);
 }
-
-void add_redir_node(t_redirectList **head, t_redirectType type, char *target, t_parser *p)
-{
-	t_redirectList *node;
-	t_redirectList *current_node;
-	
-	node = create_redir_node(type, target, p);
-	if (*head == NULL)
-		*head = node;
-	else
-	{
-		current_node = *head;
-		while(current_node->next)
-			current_node = current_node->next;
-		current_node->next = node;
-	}
-}
-
-t_pipelineList *create_pipe_node(t_astNode *command, t_parser *p)
-{
-	t_pipelineList *node;
-	
-	node = gc_malloc(p->shell, sizeof(t_pipelineList));
-	node->command = command;
-	node->next = NULL;
-	return (node);
-}
-
-void add_pipe_node(t_pipelineList **head, t_astNode *command, t_parser *p)
-{
-	t_pipelineList *node;
-	t_pipelineList *current_node;
-	
-	node = create_pipe_node(command, p);
-	if (*head == NULL)
-		*head = node;
-	else
-	{
-		current_node = *head;
-		while(current_node->next)
-			current_node = current_node->next;
-		current_node->next = node;
-	}
-}
-
-
-
-// int parser(t_shell *shell)
-// {
-
-// }
