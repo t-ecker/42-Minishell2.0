@@ -18,36 +18,43 @@ void reset(t_shell *shell)
 {
 	shell->input = NULL;
 	shell->tokens = NULL;
-	shell->exit_code = 0;
 }
+
+// all allocations inside the loop are stored inside a garbageCollector so that its easier to free (especially on errors)
+// but all persistant data like env must be freed normally
 
 void loop(t_shell *shell)
 {
+	gc_init(shell);
 	while(1)
 	{
 		reset(shell);
-		// ?
-		// set_signals
+		// set_signals (maybe)
 		get_input(shell);
 		if (input_validation(shell))
 		{
-			free_shell(shell);
-			ft_putendl_fd("valid input: ❌", 1);
+			gc_free_all(shell);
+			ft_putendl_fd("valid input: ❌", 1); //debug
 			continue ;
 		}
 		if (!ft_strncmp(shell->input, "exit", ft_strlen(shell->input)))
-			return (free_shell(shell));
+		{
+			gc_free_all(shell);
+			break;
+		}
 		lexer(shell);
-		print_tokens(shell->tokens);
+		print_tokens(shell->tokens); //debug
 		// parser(shell);
 		// execute(shell);
-		free_shell(shell);
+		gc_free_all(shell);
 	}
+	gc_destroy(shell);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
+
 	check_args(argc, argv, envp);
 	// TODO:
 	// create_env(&shell, envp);
