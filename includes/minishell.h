@@ -15,9 +15,11 @@ typedef struct s_shell t_shell;
 # include "errors.h"
 # include "lexer.h"
 # include "parser.h"
+# include "garbageCollector.h"
 
 typedef struct s_shell
 {
+	t_gc *gc;
 	char *input;
 	int exit_code;
 	char *env;	// env can be other type idk

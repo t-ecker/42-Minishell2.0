@@ -22,6 +22,8 @@ SRC =		./src/main.c \
 			./src/utils/list_utils.c \
 			./src/lexer/lexer.c \
 			./src/debug/token_debug.c \
+			./src/parser/parser.c \
+			./src/garbageCollector/garbageCollector.c \
 
 # SRC_BONUS =	./src/
 
