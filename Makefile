@@ -19,11 +19,17 @@ SRC =		./src/main.c \
 			./src/utils/errors.c \
 			./src/utils/free.c \
 			./src/utils/utils.c \
-			./src/utils/list_utils.c \
 			./src/lexer/lexer.c \
-			./src/debug/token_debug.c \
-			./src/parser/parser.c \
 			./src/garbageCollector/garbageCollector.c \
+			./src/parser/parser.c \
+			./src/parser/parse_cmd.c \
+			./src/parser/parse_logicalOP.c \
+			./src/parser/parse_pipe.c \
+			./src/parser/parse_redir.c \
+			./src/parser/parse_subshell.c \
+			./src/debug/token_debug.c \
+			./src/debug/ast_debug.c \
+
 
 # SRC_BONUS =	./src/
 

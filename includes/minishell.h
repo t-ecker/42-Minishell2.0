@@ -24,6 +24,7 @@ typedef struct s_shell
 	int exit_code;
 	char *env;	// env could be other type idk
 	t_tokenList *tokens;
+	t_astNode *ast;
 } t_shell;
 
 
@@ -46,18 +47,19 @@ void toggleBool(bool *input);
 void toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote);
 void exit_code(t_shell *shell, int code);
 
-void add_token(t_tokenList *list, TokenType type, char *value, t_shell *shell);
-t_tokenList* create_tokenList(t_shell *shell);
-
 // void free_env(idk)
 
 
 // lexer
 void lexer(t_shell *shell);
 
+// parser
+void parser(t_shell *shell);
+
 
 // debug
 void print_tokens(t_tokenList *tokens);
+void print_ast(t_astNode *node, int depth);
 
 
 
