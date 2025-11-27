@@ -17,6 +17,7 @@ typedef struct s_gc
 void gc_init(t_shell *shell);
 void *gc_malloc(t_shell *shell, size_t size);
 void *gc_add(t_shell *shell, void *ptr);
+void *gc_realloc(t_shell *shell, void *ptr, size_t new_size, size_t bytes_to_cpy);
 void gc_free(t_shell *shell, void *ptr);
 void gc_free_all(t_shell *shell);
 void gc_destroy(t_shell *shell);

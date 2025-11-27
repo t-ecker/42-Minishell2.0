@@ -52,6 +52,16 @@ void *gc_add(t_shell *shell, void *ptr)
 	return (ptr);
 }
 
+void *gc_realloc(t_shell *shell, void *ptr, size_t new_size, size_t bytes_to_cpy)
+{
+	void *new_ptr;
+
+	new_ptr = gc_malloc(shell, new_size);
+	ft_memcpy(new_ptr, ptr, bytes_to_cpy);
+	gc_free(shell, ptr);
+	return (new_ptr);
+}
+
 void gc_free(t_shell *shell, void *ptr)
 {
 	t_gc_node *current;
