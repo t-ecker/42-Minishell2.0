@@ -1,13 +1,13 @@
 # include "../../includes/minishell.h"
 
-// checks if we have a subshell ()
+// checks if we have a group ()
 // if so parse it from the very beginning
 // if not, just parse a cmd
 
-t_astNode *parse_subshell(t_parser *p)
+t_astNode *parse_group(t_parser *p)
 {
 	t_astNode *inner;
-	t_astNode *subshell_node;
+	t_astNode *group_node;
 
 	if (check_token_type(p, TOKEN_LPAREN))
 	{
@@ -15,9 +15,9 @@ t_astNode *parse_subshell(t_parser *p)
 		inner = parse_logical(p);
 		// check for r_par?
 		advance_token(p);
-		subshell_node = create_astNode(AST_SUBSHELL, p);
-		subshell_node->u_data.subshell.child = inner;
-		return (subshell_node);
+		group_node = create_astNode(AST_GROUP, p);
+		group_node->u_data.group.child = inner;
+		return (group_node);
 	}
 	return (parse_cmd(p));
 }

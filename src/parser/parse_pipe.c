@@ -36,7 +36,7 @@ t_astNode *parse_pipe(t_parser *p)
 	t_astNode *next_cmd;
 	t_astNode *pipe_node;
 	
-	first_cmd = parse_subshell(p);
+	first_cmd = parse_group(p);
 	// null check
 	if (!check_token_type(p, TOKEN_PIPE))
 		return (first_cmd);
@@ -46,7 +46,7 @@ t_astNode *parse_pipe(t_parser *p)
 	while(check_token_type(p, TOKEN_PIPE))
 	{
 		advance_token(p);
-		next_cmd = parse_subshell(p);
+		next_cmd = parse_group(p);
 		// check cmd
 		add_pipe_node(&pipe_node->u_data.pipeline.commands, next_cmd, p);
 	}

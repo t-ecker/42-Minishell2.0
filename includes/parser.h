@@ -65,17 +65,17 @@ typedef struct s_logicalOpNode
     t_astNode *right;
 } t_logicalOpNode;
 
-typedef struct s_subshellNode
+typedef struct s_groupNode
 {
     t_astNode *child;
-} t_subshellNode;
+} t_groupNode;
 
 typedef enum t_astNodeType
 {
     AST_COMMAND,
     AST_PIPE,
     AST_LOGICAL_OP,
-	AST_SUBSHELL
+	AST_GROUP
 } t_astNodeType;
 
 typedef struct s_astNode
@@ -86,7 +86,7 @@ typedef struct s_astNode
 		t_commandNode command;
 		t_pipelineNode pipeline;
 		t_logicalOpNode logical_op;
-		t_subshellNode subshell;
+		t_groupNode group;
 	}	u_data;
 } t_astNode;
 
@@ -99,7 +99,7 @@ void advance_token(t_parser *p);
 t_astNode *create_astNode(t_astNodeType type, t_parser *p);
 
 t_astNode *parse_logical(t_parser *p);
-t_astNode *parse_subshell(t_parser *p);
+t_astNode *parse_group(t_parser *p);
 t_astNode *parse_pipe(t_parser *p);
 t_astNode *parse_cmd(t_parser *p);
 void handle_redirection(t_redirectList **head, t_parser *p);

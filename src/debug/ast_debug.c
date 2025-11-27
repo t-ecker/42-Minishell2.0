@@ -5,7 +5,7 @@ const char* ast_type_to_string(t_astNodeType type) {
         case AST_COMMAND: return "COMMAND";
         case AST_PIPE: return "PIPELINE";
         case AST_LOGICAL_OP: return "LOGICAL_OP";
-        case AST_SUBSHELL: return "SUBSHELL";
+        case AST_GROUP: return "GROUP";
         default: return "UNKNOWN";
     }
 }
@@ -103,9 +103,9 @@ void print_ast(t_astNode *node, int depth)
             break;
         }
         
-        case AST_SUBSHELL: {
+        case AST_GROUP: {
             printf("\n");
-            print_ast(node->u_data.subshell.child, depth + 1);
+            print_ast(node->u_data.group.child, depth + 1);
             break;
         }
     }

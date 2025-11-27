@@ -26,7 +26,7 @@ SRC =		./src/main.c \
 			./src/parser/parse_logicalOP.c \
 			./src/parser/parse_pipe.c \
 			./src/parser/parse_redir.c \
-			./src/parser/parse_subshell.c \
+			./src/parser/parse_group.c \
 			./src/expander/expander.c \
 			./src/expander/expand_variable.c \
 			./src/env/env.c \
