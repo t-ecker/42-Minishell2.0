@@ -42,11 +42,13 @@ void loop(t_shell *shell)
 			gc_free_all(shell);
 			break;
 		}
-		lexer(shell);
-		print_tokens(shell->tokens); //debug
-		parser(shell);
-		print_ast(shell->ast, 0);
+		// lexer(shell);
+		// print_tokens(shell->tokens); //debug
+		// parser(shell);
+		// print_ast(shell->ast, 0);
 		// execute(shell);
+		expander(&shell->input, shell);
+		ft_putendl_fd(shell->input, 1);
 		gc_free_all(shell);
 	}
 	gc_destroy(shell);
@@ -55,7 +57,8 @@ void loop(t_shell *shell)
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
-
+	
+	shell.exit_code = 0;
 	check_args(argc, argv, envp);
 	// TODO:
 	// create_env(&shell, envp);

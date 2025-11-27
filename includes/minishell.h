@@ -12,10 +12,12 @@
 
 typedef struct s_shell t_shell;
 
+# include "env.h"
 # include "errors.h"
 # include "lexer.h"
 # include "parser.h"
 # include "garbageCollector.h"
+# include "expander.h"
 
 typedef struct s_shell
 {
