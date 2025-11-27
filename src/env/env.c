@@ -4,6 +4,7 @@
 // hardcoded version for now!
 char *get_env_var(char *var_name, t_shell *shell)
 {
+	(void)shell;
 	if (ft_strncmp(var_name, "HOME", ft_strlen(var_name)) == 0)
 		return "/home/user";
 	if (ft_strncmp(var_name, "USER", ft_strlen(var_name)) == 0)
