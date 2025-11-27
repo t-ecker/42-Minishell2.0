@@ -88,22 +88,21 @@ void lexer(t_shell *shell)
 {
 	int pos;
 	char *str;
-	t_tokenList *tokens;
+	t_tokenList tokens;
 
-	tokens = gc_malloc(shell, sizeof(t_tokenList));
-    tokens->head = NULL;
-    tokens->size = 0;
+    tokens.head = NULL;
+    tokens.size = 0;
 	
 	pos = 0;
 	str = shell->input;
 	while (str[pos])
 	{
 		skip_spaces(str, &pos);
-		if (check_double_char_operators(str, &pos, tokens, shell)
-			|| check_single_char_operators(str, &pos, tokens, shell))
+		if (check_double_char_operators(str, &pos, &tokens, shell)
+			|| check_single_char_operators(str, &pos, &tokens, shell))
 			continue;
-		check_word(str, &pos, tokens, shell);
+		check_word(str, &pos, &tokens, shell);
 	}
-	add_token(tokens, TOKEN_EOF, "", shell);
+	add_token(&tokens, TOKEN_EOF, "", shell);
 	shell->tokens = tokens;
 }

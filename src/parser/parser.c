@@ -33,11 +33,10 @@ bool check_token_type(t_parser *p, t_tokenType type)
 
 void parser(t_shell *shell)
 {
-	t_parser *p;
+	t_parser p;
 	
-	p = gc_malloc(shell, sizeof(t_parser));
-	p->shell = shell;
-	p->current_token = shell->tokens->head;
+	p.shell = shell;
+	p.current_token = shell->tokens.head;
 
-	shell->ast = parse_logical(p);
+	shell->ast = parse_logical(&p);
 }

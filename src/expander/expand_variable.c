@@ -36,31 +36,31 @@ void handle_var(char *str, int *pos, t_expand *e)
 char *expand_var(char *str, t_shell *shell)
 {
 	int pos;
-	t_expand *e;
+	t_expand e;
 
 	pos = 0;
-	e = create_expander(shell);
+	init_expander(&e, shell);
 	while (str[pos])
 	{
 		if (str[pos] == '\'' || str[pos] == '"')
 		{
-			toggle_quote(str[pos], &e->insideDoubleQuote, &e->insideSingleQuote);
-			append_char(str[pos], e);
+			toggle_quote(str[pos], &e.insideDoubleQuote, &e.insideSingleQuote);
+			append_char(str[pos], &e);
 		}
-		else if (str[pos] == '$' && !e->insideSingleQuote)
+		else if (str[pos] == '$' && !e.insideSingleQuote)
 		{
 			++pos;
 			if (str[pos] == '?')
-				append_str(gc_add(shell, ft_itoa(shell->exit_code)), e);
+				append_str(gc_add(shell, ft_itoa(shell->exit_code)), &e);
 			else
 			{
-				handle_var(str, &pos, e);
+				handle_var(str, &pos, &e);
 				continue;
 			}
 		}
 		else
-			append_char(str[pos], e);
+			append_char(str[pos], &e);
 		++pos;
 	}
-	return (e->res);
+	return (e.res);
 }

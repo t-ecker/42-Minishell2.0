@@ -17,7 +17,7 @@ void check_args(int argc, char **argv, char **envp)
 void reset(t_shell *shell)
 {
 	shell->input = NULL;
-	shell->tokens = NULL;
+	// shell->tokens = NULL;
 }
 
 // all allocations inside the loop are stored inside a garbageCollector so that its easier to free (especially on errors)
@@ -25,7 +25,6 @@ void reset(t_shell *shell)
 
 void loop(t_shell *shell)
 {
-	gc_init(shell);
 	while(1)
 	{
 		reset(shell);
@@ -47,18 +46,17 @@ void loop(t_shell *shell)
 		parser(shell);
 		print_ast(shell->ast, 0);
 		// execute(shell);
-		// expander(&shell->input, shell);
-		// ft_putendl_fd(shell->input, 1);
+		expander(&shell->input, shell);
+		ft_putendl_fd(shell->input, 1);
 		gc_free_all(shell);
 	}
-	gc_destroy(shell);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	t_shell shell;
 	
-	shell.exit_code = 0;
+	ft_memset(&shell, 0, sizeof(t_shell));
 	check_args(argc, argv, envp);
 	// TODO:
 	// create_env(&shell, envp);

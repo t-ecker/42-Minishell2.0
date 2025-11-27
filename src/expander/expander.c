@@ -26,18 +26,14 @@ void append_str(char *str, t_expand *e)
 	}
 }
 
-t_expand *create_expander(t_shell *shell)
+void init_expander(t_expand *e, t_shell *shell)
 {
-	t_expand *e;
-
-	e = gc_malloc(shell, sizeof(t_expand));
 	e->capacity = 10;
 	e->res = gc_malloc(shell, e->capacity);
 	e->res[0] = '\0';
 	e->shell = shell;
 	e->insideDoubleQuote = false;
 	e->insideSingleQuote = false;
-	return (e);
 }
 
 void expander(char **str, t_shell *shell)

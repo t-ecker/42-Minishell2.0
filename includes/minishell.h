@@ -21,11 +21,11 @@ typedef struct s_shell t_shell;
 
 typedef struct s_shell
 {
-	t_gc *gc;
+	t_gc gc;
 	char *input;
 	int exit_code;
 	char *env;	// env could be other type idk
-	t_tokenList *tokens;
+	t_tokenList tokens;
 	t_astNode *ast;
 } t_shell;
 
@@ -60,7 +60,7 @@ void parser(t_shell *shell);
 
 
 // debug
-void print_tokens(t_tokenList *tokens);
+void print_tokens(t_tokenList tokens);
 void print_ast(t_astNode *node, int depth);
 
 

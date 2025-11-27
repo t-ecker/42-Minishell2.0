@@ -19,10 +19,10 @@ const char* token_type_to_string(t_tokenType type)
     }
 }
 
-void print_tokens(t_tokenList *tokens)
+void print_tokens(t_tokenList tokens)
 {
-    printf("Tokens (%zu):\n", (size_t)tokens->size);
-    t_token *current = tokens->head;
+    printf("Tokens (%zu):\n", (size_t)tokens.size);
+    t_token *current = tokens.head;
     int i = 0;
     while (current)
 	{
