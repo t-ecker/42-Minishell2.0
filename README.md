@@ -43,3 +43,6 @@ LOOP:
 # GOOD TO KNOW:
 Heredoc delimiter can have „“ that need to be removed. E“s“ = Es and E\s = Es
 Heredoc with quoted delimiter changes expansion behaviour inside heredoc
+
+
+Region-based memory management
