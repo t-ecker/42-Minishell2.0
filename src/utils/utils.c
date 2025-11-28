@@ -43,3 +43,27 @@ void toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote)
 	else if (c == '"' && !*openSingleQuote)
 		toggleBool(openDoubleQuote);
 }
+
+char *remove_quotes(char *str, t_shell *shell)
+{
+	int pos;
+	t_expand e;
+	char quote;
+
+	init_expander(&e, shell);
+	pos = 0;
+	while (str[pos])
+	{
+		if (str[pos] == '\'' || str[pos] =='"')
+		{
+			quote = str[pos++];
+			while(str[pos] && str[pos] != quote)
+				append_char(str[pos++], &e);
+			if (str[pos] == quote)
+				++pos;
+		}
+		else
+			append_char(str[pos++], &e);
+	}
+	return (e.res);
+}

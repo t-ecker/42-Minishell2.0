@@ -48,6 +48,7 @@ void skip_spaces(char *str, int *pos);
 void toggleBool(bool *input);
 void toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote);
 void exit_code(t_shell *shell, int code);
+char *remove_quotes(char *str, t_shell *shell);
 
 // void free_env(idk)
 
