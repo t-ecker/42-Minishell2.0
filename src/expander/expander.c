@@ -39,6 +39,6 @@ void init_expander(t_expand *e, t_shell *shell)
 void expander(char **str, t_shell *shell)
 {
 	*str = expand_var(*str, shell);
-	// *str = expand_wildcards(*str, shell);
-	// *str = remove_quotes(*str, shell);
+	*str = expand_wildcard(*str, shell);
+	*str = remove_quotes(*str, shell);
 }
