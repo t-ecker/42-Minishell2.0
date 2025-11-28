@@ -4,6 +4,7 @@
 # define FATAL_ERROR "minishell: fatal error: "
 # define MALLOC_ERROR "malloc failed"
 # define READLINE_ERROR "readline failed"
+# define OPENDIR_ERROR "opendir failed"
 
 
 # define SYNTAX_ERROR "minishell: syntax error"
