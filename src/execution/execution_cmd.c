@@ -1,5 +1,50 @@
 #include "../../includes/minishell.h"
 
+int execute_redirection(t_executor *e, t_redirectList *node)
+{
+	int fd;
+
+	expander(&node->target, e->shell, false);
+	if (node->type == REDIR_INPUT)
+	{
+		fd = open(node->target, O_RDONLY);
+		if (fd == -1)
+			return (execution_error(strerror(errno), node->target), 1);
+		if (dup2(fd, STDIN_FILENO) == -1)
+			fatal_error(e->shell, DUP_ERROR);
+		close(fd);
+	}
+	else if (node->type == REDIR_OUTPUT)
+	{
+		fd = open(node->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd == -1)
+			return (execution_error(strerror(errno), node->target), 1);
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			fatal_error(e->shell, DUP_ERROR);
+		close(fd);
+	}
+	else if (node->type == REDIR_APPEND)
+	{
+		fd = open(node->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd == -1)
+			return (execution_error(strerror(errno), node->target), 1);
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			fatal_error(e->shell, DUP_ERROR);
+		close(fd);
+	}
+	else if (node->type == REDIR_HEREDOC)
+	{
+		fd = open(node->target, O_RDONLY);
+		if (fd == -1)
+			return (eexecution_error(strerror(errno), node->target), 1);
+		if (dup2(fd, STDIN_FILENO) == -1)
+			fatal_error(e->shell, DUP_ERROR);
+		unlink(node->target);
+		close(fd);
+	}
+	return (0);
+}
+
 char **args_to_array(t_shell *shell, t_astNode *node)
 {
 	t_argList *list;
