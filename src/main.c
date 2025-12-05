@@ -48,6 +48,7 @@ void loop(t_shell *shell)
 		// execute(shell);
 		expander(&shell->input, shell);
 		ft_putendl_fd(shell->input, 1);
+		execute(shell, shell->ast);
 		gc_free_all(shell);
 	}
 }

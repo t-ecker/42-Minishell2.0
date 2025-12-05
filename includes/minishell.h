@@ -5,8 +5,15 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <stdbool.h>
+# include <fcntl.h>
+# include <errno.h> 
+# include <string.h>
+# include <signal.h>
+# include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 
 # include "../libft/libft.h"
 
@@ -17,6 +24,7 @@ typedef struct s_shell t_shell;
 # include "lexer.h"
 # include "parser.h"
 # include "garbageCollector.h"
+# include "execution.h"
 # include "expander.h"
 
 typedef struct s_shell
