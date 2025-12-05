@@ -35,10 +35,40 @@ char **args_to_array(t_shell *shell, t_astNode *node)
 	return (array);
 }
 
+int get_cmd_path(char *cmd, t_executor *e, char **path)
+{
+	if (ft_strchr(cmd, '/'))
+		*path = cmd;
+	else
+		*path = search_in_path(cmd, e);
+	return(validate_path(*path, cmd));
+}
+
 int execute_cmd(t_executor *e, t_astNode *node)
 {
 	char **args;
+    char *path;
+    int pid;
+    int status;
+    int code;
 
 	args = args_to_array(e->shell, node);
+    code = get_cmd_path(args[0], e, &path);
+	if (code)
+		return (code);
+	pid = fork();
+	if (pid < 0)
+		fatal_error(e->shell, FORK_ERROR);
+	if (pid == 0)
+	{
+		setup_child_signals();
+		execve(path, args, e->shell->env);
+		// ft_putendl_fd("aa", 2);
+		execution_error(strerror(errno), args[0]);
+		if (errno == ENOENT)
+            exit(127);
+		exit(126);
+	}
+	waitpid(pid, &status, 0);
 	return (get_exit_code(status));
 }
