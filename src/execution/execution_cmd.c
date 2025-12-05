@@ -44,6 +44,20 @@ int get_cmd_path(char *cmd, t_executor *e, char **path)
 	return(validate_path(*path, cmd));
 }
 
+int handle_redirections(t_executor *e, t_redirectList *node)
+{
+	t_redirectList *current;
+
+	current = node;
+	while(current)
+	{
+		if (execute_redirection(e, current))
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
 int execute_cmd(t_executor *e, t_astNode *node)
 {
 	char **args;
@@ -53,6 +67,16 @@ int execute_cmd(t_executor *e, t_astNode *node)
     int code;
 
 	args = args_to_array(e->shell, node);
+    // signals??
+	if (handle_redirections(e, node->u_data.command.redirects))
+		return (1);
+	if (!args)
+		return (0);
+	g_signal_received = 0;
+	signal(SIGINT, SIG_IGN);
+		// builtin = is_buildin(args[0]);
+		// if (builtin != NONE)
+		// 	return(execute_buildin(e, args));
     code = get_cmd_path(args[0], e, &path);
 	if (code)
 		return (code);
