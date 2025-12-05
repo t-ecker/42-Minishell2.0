@@ -45,6 +45,20 @@ int execute_redirection(t_executor *e, t_redirectList *node)
 	return (0);
 }
 
+int handle_redirections(t_executor *e, t_redirectList *node)
+{
+	t_redirectList *current;
+
+	current = node;
+	while(current)
+	{
+		if (execute_redirection(e, current))
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
 char **args_to_array(t_shell *shell, t_astNode *node)
 {
 	t_argList *list;
@@ -80,6 +94,43 @@ char **args_to_array(t_shell *shell, t_astNode *node)
 	return (array);
 }
 
+char *search_in_path(char *cmd, t_executor *e)
+{
+	char *path;
+	char **paths;
+	char *full_path;
+	int i;
+
+	path = get_env_var("PATH", e->shell);
+	if (!path)
+		return (NULL);
+	paths = gc_add(e->shell, ft_split(path, ':'));
+	i = 0;
+	while(paths[i])
+	{
+		full_path = gc_add(e->shell, ft_strjoin(paths[i], "/"));
+		full_path = gc_add(e->shell, ft_strjoin(full_path, cmd));
+		if (access(full_path, X_OK) == 0)
+			return(full_path);
+		++i;
+	}
+	return (NULL);
+}
+
+int validate_path(char *path, char *cmd)
+{
+	struct stat st;
+
+	if (!path || stat(path, &st) < 0)
+		return (execution_error(CMD_NOT_FOUND_ERROR, cmd), 127);
+	if (S_ISDIR(st.st_mode))
+		return (execution_error(IS_DIR_ERROR, path), 126);
+	if (access(path, X_OK) < 0)
+		return (execution_error(PERMISSION_ERROR, path), 126);
+	return (0);
+}
+
+
 int get_cmd_path(char *cmd, t_executor *e, char **path)
 {
 	if (ft_strchr(cmd, '/'))
@@ -89,30 +140,36 @@ int get_cmd_path(char *cmd, t_executor *e, char **path)
 	return(validate_path(*path, cmd));
 }
 
-int handle_redirections(t_executor *e, t_redirectList *node)
+int get_exit_code(int status)
 {
-	t_redirectList *current;
+	int sig;
 
-	current = node;
-	while(current)
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
 	{
-		if (execute_redirection(e, current))
-			return (1);
-		current = current->next;
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			ft_putendl_fd("", 2);
+		if (sig == SIGQUIT)
+			ft_putendl_fd("Quit", 2); //3 correct?? output depends on bash version
+		return (128 + sig);
 	}
-	return (0);
+	return 0;
 }
 
 int execute_cmd(t_executor *e, t_astNode *node)
 {
 	char **args;
-    char *path;
-    int pid;
-    int status;
-    int code;
+	char *path;
+	int pid;
+	int status;
+	int code;
+	// t_builtin_type builtin;
+	
 
 	args = args_to_array(e->shell, node);
-    // signals??
+	// signals??
 	if (handle_redirections(e, node->u_data.command.redirects))
 		return (1);
 	if (!args)
@@ -122,7 +179,7 @@ int execute_cmd(t_executor *e, t_astNode *node)
 		// builtin = is_buildin(args[0]);
 		// if (builtin != NONE)
 		// 	return(execute_buildin(e, args));
-    code = get_cmd_path(args[0], e, &path);
+	code = get_cmd_path(args[0], e, &path);
 	if (code)
 		return (code);
 	pid = fork();
