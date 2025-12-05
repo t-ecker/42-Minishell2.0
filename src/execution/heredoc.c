@@ -1,5 +1,10 @@
 #include "../../includes/minishell.h"
 
+bool handle_heredoc(t_redirectList *redir, t_shell *shell)
+{
+	return (true);
+}
+
 bool	check_heredoc(t_astNode *node, t_shell *shell)
 {
 	t_redirectList *redir;
