@@ -27,6 +27,8 @@ typedef struct s_shell t_shell;
 # include "execution.h"
 # include "expander.h"
 
+extern volatile sig_atomic_t g_signal_received;
+
 typedef struct s_shell
 {
 	t_gc gc;

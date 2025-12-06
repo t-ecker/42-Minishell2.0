@@ -36,9 +36,10 @@ void init_expander(t_expand *e, t_shell *shell)
 	e->insideSingleQuote = false;
 }
 
-void expander(char **str, t_shell *shell)
+void expander(char **str, t_shell *shell, bool exp_wilcards)
 {
 	*str = expand_var(*str, shell);
-	*str = expand_wildcard(*str, shell);
+	if (exp_wilcards)
+		*str = expand_wildcard(*str, shell);
 	*str = remove_quotes(*str, shell);
 }

@@ -18,7 +18,7 @@ typedef struct s_fileList
 	struct s_fileList *next;
 }	t_fileList;
 
-void expander(char **str, t_shell *shell);
+void expander(char **str, t_shell *shell, bool exp_wilcards);
 char *expand_var(char *str, t_shell *shell);
 void init_expander(t_expand *e, t_shell *shell);
 void append_str(char *str, t_expand *e);
