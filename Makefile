@@ -33,6 +33,10 @@ SRC =		./src/main.c \
 			./src/env/env.c \
 			./src/debug/token_debug.c \
 			./src/debug/ast_debug.c \
+			./src/signals/signals.c \
+			./src/execution/execution.c \
+			./src/execution/execution_cmd.c \
+			./src/execution/heredoc.c \
 
 
 # SRC_BONUS =	./src/

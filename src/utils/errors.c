@@ -26,3 +26,11 @@ void fatal_error(t_shell *shell, char *msg)
 	ft_putendl_fd(msg, 2);
 	exit(1);
 }
+
+void execution_error(char *str, char *cmd)
+{
+	ft_putstr_fd(MINISHELL_BASE, 2);
+	ft_putstr_fd(cmd, 2);
+	// ft_putstr_fd(": ", 2);
+	ft_putendl_fd(str, 2);
+}

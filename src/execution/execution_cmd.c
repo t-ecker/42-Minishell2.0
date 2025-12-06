@@ -36,7 +36,7 @@ int execute_redirection(t_executor *e, t_redirectList *node)
 	{
 		fd = open(node->target, O_RDONLY);
 		if (fd == -1)
-			return (eexecution_error(strerror(errno), node->target), 1);
+			return (execution_error(strerror(errno), node->target), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
 			fatal_error(e->shell, DUP_ERROR);
 		unlink(node->target);

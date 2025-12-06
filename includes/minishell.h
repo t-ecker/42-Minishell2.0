@@ -75,6 +75,9 @@ void parser(t_shell *shell);
 void print_tokens(t_tokenList tokens);
 void print_ast(t_astNode *node, int depth);
 
-
+// signals
+void setup_child_signals(void);
+void setup_main_signals(void);
+void setup_heredoc_signals(void);
 
 # endif

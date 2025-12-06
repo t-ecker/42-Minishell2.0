@@ -45,8 +45,6 @@ void loop(t_shell *shell)
 		print_tokens(shell->tokens); //debug
 		parser(shell);
 		print_ast(shell->ast, 0);
-		// execute(shell);
-		expander(&shell->input, shell);
 		ft_putendl_fd(shell->input, 1);
 		execute(shell, shell->ast);
 		gc_free_all(shell);
