@@ -34,7 +34,8 @@ typedef struct s_shell
 	t_gc gc;
 	char *input;
 	int exit_code;
-	char *env;	// env could be other type idk
+	int heredoc_counter;
+	char **env;	// env could be other type idk
 	t_tokenList tokens;
 	t_astNode *ast;
 } t_shell;
