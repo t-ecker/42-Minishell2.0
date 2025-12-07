@@ -39,6 +39,7 @@ SRC =		./src/main.c \
 			./src/execution/execute_pipe.c \
 			./src/execution/execute_logical.c \
 			./src/execution/heredoc.c \
+			./src/builtins/cd.c \
 
 
 # SRC_BONUS =	./src/
