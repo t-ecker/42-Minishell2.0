@@ -24,8 +24,8 @@ typedef struct s_shell t_shell;
 # include "lexer.h"
 # include "parser.h"
 # include "garbageCollector.h"
-# include "execution.h"
 # include "expander.h"
+# include "execution.h"
 
 extern volatile sig_atomic_t g_signal_received;
 
@@ -64,7 +64,10 @@ char *remove_quotes(char *str, t_shell *shell);
 void free_all(t_shell *shell);
 void free_env(t_shell *shell);
 
-// void free_env(idk)
+void setup_main_signals(void);
+void setup_child_signals(void);
+void setup_heredoc_signals(void);
+
 
 
 // lexer
@@ -73,14 +76,9 @@ void lexer(t_shell *shell);
 // parser
 void parser(t_shell *shell);
 
-
 // debug
 void print_tokens(t_tokenList tokens);
 void print_ast(t_astNode *node, int depth);
 
-// signals
-void setup_child_signals(void);
-void setup_main_signals(void);
-void setup_heredoc_signals(void);
 
 # endif
