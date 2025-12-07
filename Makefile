@@ -30,6 +30,8 @@ SRC =		./src/main.c \
 			./src/expander/expander.c \
 			./src/expander/expand_variable.c \
 			./src/expander/expand_wildcard.c \
+			./src/env/create_env_list.c \
+			./src/env/utils.c \
 			./src/debug/token_debug.c \
 			./src/debug/ast_debug.c \
 			./src/signals/signals.c \
@@ -39,6 +41,7 @@ SRC =		./src/main.c \
 			./src/execution/execute_logical.c \
 			./src/execution/heredoc.c \
 			./src/builtins/cd.c \
+			./src/builtins/echo.c \
 
 
 # SRC_BONUS =	./src/

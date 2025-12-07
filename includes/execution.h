@@ -34,4 +34,7 @@ int execute_logical(t_shell *shell, t_astNode *node);
 int execute_pipe(t_shell *shell, t_astNode *node);
 int get_exit_code(int status);
 
+int ft_cd(char **args, t_shell *shell);
+int ft_echo(char **args);
+
 #endif
