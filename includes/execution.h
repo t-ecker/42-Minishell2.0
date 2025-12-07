@@ -35,7 +35,11 @@ int execute_pipe(t_shell *shell, t_astNode *node);
 int get_exit_code(int status);
 
 int ft_env(char **args, t_shell *shell);
-int ft_cd(char **args, t_shell *shell);
+int ft_export(char **args, t_shell *shell);
+int ft_unset(char **args, t_shell *shell);
 int ft_echo(char **args);
+int ft_pwd(t_shell *shell);
+int ft_cd(char **args, t_shell *shell);
+// int ft_exit(char **args, t_shell *shell);
 
 #endif

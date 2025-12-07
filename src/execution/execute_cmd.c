@@ -177,17 +177,17 @@ t_builtin_type is_buildin(char *cmd)
 
 int execute_buildin(t_shell *shell, char **args, t_builtin_type type)
 {
-	// ft_putendl_fd("execute builtin", 2);
+	ft_putendl_fd("execute builtin", 2);
 	if (type == ECHOO)
 		return (ft_echo(args));
 	else if (type == CD)
 		return (ft_cd(args, shell));
-	// else if (type == PWD)
-	// 	return (ft_pwd(shell));
-	// if (type == EXPORT)
-	// 	return (ft_export(args, shell));
-	// else if (type == UNSET)
-	// 	return (ft_unset(args, shell));
+	else if (type == PWD)
+		return (ft_pwd(shell));
+	if (type == EXPORT)
+		return (ft_export(args, shell));
+	else if (type == UNSET)
+		return (ft_unset(args, shell));
 	else if (type == ENV)
 		return (ft_env(args, shell));
 	// else if (type == EXIT)

@@ -61,6 +61,9 @@ void toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote);
 void exit_code(t_shell *shell, int code);
 char *remove_quotes(char *str, t_shell *shell);
 
+void free_all(t_shell *shell);
+void free_env(t_shell *shell);
+
 // void free_env(idk)
 
 

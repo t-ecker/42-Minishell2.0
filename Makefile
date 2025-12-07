@@ -40,9 +40,13 @@ SRC =		./src/main.c \
 			./src/execution/execute_pipe.c \
 			./src/execution/execute_logical.c \
 			./src/execution/heredoc.c \
-			./src/builtins/cd.c \
-			./src/builtins/echo.c \
 			./src/builtins/env.c \
+			./src/builtins/export.c \
+			./src/builtins/unset.c \
+			./src/builtins/echo.c \
+			./src/builtins/pwd.c \
+			./src/builtins/cd.c \
+# 			./src/builtins/exit.c \
 
 
 # SRC_BONUS =	./src/

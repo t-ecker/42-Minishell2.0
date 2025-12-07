@@ -32,6 +32,7 @@ void syntax_error(char *str);
 void syntax_error_unexpected_token(char c);
 void fatal_error(t_shell *shell, char *msg);
 void execution_error(char *str, char *cmd);
+void export_error(char c);
 
 
 #endif
