@@ -84,11 +84,14 @@ char **args_to_array(t_shell *shell, t_astNode *node)
 	while(current)
 	{
 		expander(&current->value, shell, true);
-		len = ft_strlen(current->value);
-		array[i] = gc_malloc(shell, len + 1);
-		ft_strlcpy(array[i], current->value, len + 1);
+		if (current->value[0])
+		{
+			len = ft_strlen(current->value);
+			array[i] = gc_malloc(shell, len + 1);
+			ft_strlcpy(array[i], current->value, len + 1);
+			++i;
+		}
 		current = current->next;
-		++i;
 	}
 	array[i] = NULL;
 	return (array);
@@ -107,6 +110,9 @@ char *search_in_path(char *cmd, t_shell *shell)
 	paths = gc_add(shell, ft_split(path, ':'));
 	i = 0;
 	while(paths[i])
+		gc_add(shell, paths[i++]);
+	i = 0;
+	while(paths[i])
 	{
 		full_path = gc_add(shell, ft_strjoin(paths[i], "/"));
 		full_path = gc_add(shell, ft_strjoin(full_path, cmd));
@@ -117,12 +123,16 @@ char *search_in_path(char *cmd, t_shell *shell)
 	return (NULL);
 }
 
-int validate_path(char *path, char *cmd)
+int validate_path(char *path, char *cmd, bool is_absolute)
 {
 	struct stat st;
 
 	if (!path || stat(path, &st) < 0)
+	{
+		if (is_absolute)
+			return (execution_error(NO_SUCH_FILE_ERROR, cmd), 127);
 		return (execution_error(CMD_NOT_FOUND_ERROR, cmd), 127);
+	}
 	if (S_ISDIR(st.st_mode))
 		return (execution_error(IS_DIR_ERROR, path), 126);
 	if (access(path, X_OK) < 0)
@@ -133,13 +143,64 @@ int validate_path(char *path, char *cmd)
 
 int get_cmd_path(char *cmd, t_shell *shell, char **path)
 {
-	if (ft_strchr(cmd, '/'))
+	bool is_absolute;
+
+	is_absolute = (ft_strchr(cmd, '/') != NULL);
+	if (is_absolute)
 		*path = cmd;
 	else
 		*path = search_in_path(cmd, shell);
-	return(validate_path(*path, cmd));
+	return(validate_path(*path, cmd, is_absolute));
 }
 
+t_builtin_type is_buildin(char *cmd)
+{
+	size_t len;
+
+	len = ft_strlen(cmd);
+	if (ft_strncmp(cmd, "echo", len) == 0 && len == 4)
+		return (ECHOO);
+	else if (ft_strncmp(cmd, "cd", len) == 0 && len == 2)
+		return (CD);
+	else if (ft_strncmp(cmd, "pwd", len) == 0 && len == 3)
+		return (PWD);
+	else if (ft_strncmp(cmd, "export", len) == 0 && len == 6)
+		return (EXPORT);
+	else if (ft_strncmp(cmd, "unset", len) == 0 && len == 5)
+		return (UNSET);
+	else if (ft_strncmp(cmd, "env", len) == 0 && len == 3)
+		return (ENV);
+	else if (ft_strncmp(cmd, "exit", len) == 0 && len == 4)
+		return (EXIT);
+	return (NONE);
+}
+
+int execute_buildin(t_shell *shell, char **args, t_builtin_type type)
+{
+	// ft_putendl_fd("execute builtin", 2);
+	if (type == ECHOO)
+		return (ft_echo(args));
+	else if (type == CD)
+		return (ft_cd(args, shell));
+	// else if (type == PWD)
+	// 	return (ft_pwd(shell));
+	// if (type == EXPORT)
+	// 	return (ft_export(args, shell));
+	// else if (type == UNSET)
+	// 	return (ft_unset(args, shell));
+	else if (type == ENV)
+		return (ft_env(args, shell));
+	// else if (type == EXIT)
+	// 	return (ft_exit(args, shell));
+	return (1);
+}
+
+// does it print ^C???
+// mac bash:
+// if (sig == SIGINT)
+// 	ft_putendl_fd("^C", 2);
+// if (sig == SIGQUIT)
+// 	ft_putendl_fd("^\\Quit: 3", 2);
 int get_exit_code(int status)
 {
 	int sig;
@@ -161,31 +222,32 @@ int get_exit_code(int status)
 int execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child)
 {
 	char **args;
+	char **env;
 	char *path;
 	int pid;
 	int status;
 	int code;
-	// t_builtin_type builtin;
+	t_builtin_type builtin;
 	
-
 	args = args_to_array(shell, node);
-	// signals??
+	env = env_list_to_array(shell);
 	if (handle_redirections(shell, node->u_data.command.redirects))
 		return (1);
-	if (!args)
+	// ft_putendl_fd(args[0], 1);
+	if (!args || !args[0])
 		return (0);
 	g_signal_received = 0;
 	signal(SIGINT, SIG_IGN);
-		// builtin = is_buildin(args[0]);
-		// if (builtin != NONE)
-		// 	return(execute_buildin(e, args));
+	builtin = is_buildin(args[0]);
+	if (builtin != NONE)
+		return(execute_buildin(shell, args, builtin));
 	code = get_cmd_path(args[0], shell, &path);
 	if (code)
 		return (code);
 	if (!exec_in_child)
 	{
-		ft_putendl_fd("execute without new fork", 2);
-		execve(path, args, shell->env);
+		// ft_putendl_fd("execute without new fork", 2);
+		execve(path, args, env);
 		execution_error(strerror(errno), args[0]);
 		if (errno == ENOENT)
             exit(127);
@@ -197,8 +259,8 @@ int execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child)
 	if (pid == 0)
 	{
 		setup_child_signals();
-		ft_putendl_fd("execute inside new fork", 2);
-		execve(path, args, shell->env);
+		// ft_putendl_fd("execute inside new fork", 2);
+		execve(path, args, env);
 		execution_error(strerror(errno), args[0]);
 		if (errno == ENOENT)
             exit(127);

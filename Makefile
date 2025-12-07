@@ -42,6 +42,7 @@ SRC =		./src/main.c \
 			./src/execution/heredoc.c \
 			./src/builtins/cd.c \
 			./src/builtins/echo.c \
+			./src/builtins/env.c \
 
 
 # SRC_BONUS =	./src/
