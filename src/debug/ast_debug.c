@@ -109,4 +109,5 @@ void print_ast(t_astNode *node, int depth)
             break;
         }
     }
+    printf("\n\n");
 }

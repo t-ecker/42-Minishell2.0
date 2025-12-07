@@ -1,17 +1,17 @@
 #include "../../includes/minishell.h"
 
-int execute_redirection(t_executor *e, t_redirectList *node)
+int execute_redirection(t_shell *shell, t_redirectList *node)
 {
 	int fd;
 
-	expander(&node->target, e->shell, false);
+	expander(&node->target, shell, false);
 	if (node->type == REDIR_INPUT)
 	{
 		fd = open(node->target, O_RDONLY);
 		if (fd == -1)
 			return (execution_error(strerror(errno), node->target), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
-			fatal_error(e->shell, DUP_ERROR);
+			fatal_error(shell, DUP_ERROR);
 		close(fd);
 	}
 	else if (node->type == REDIR_OUTPUT)
@@ -20,7 +20,7 @@ int execute_redirection(t_executor *e, t_redirectList *node)
 		if (fd == -1)
 			return (execution_error(strerror(errno), node->target), 1);
 		if (dup2(fd, STDOUT_FILENO) == -1)
-			fatal_error(e->shell, DUP_ERROR);
+			fatal_error(shell, DUP_ERROR);
 		close(fd);
 	}
 	else if (node->type == REDIR_APPEND)
@@ -29,7 +29,7 @@ int execute_redirection(t_executor *e, t_redirectList *node)
 		if (fd == -1)
 			return (execution_error(strerror(errno), node->target), 1);
 		if (dup2(fd, STDOUT_FILENO) == -1)
-			fatal_error(e->shell, DUP_ERROR);
+			fatal_error(shell, DUP_ERROR);
 		close(fd);
 	}
 	else if (node->type == REDIR_HEREDOC)
@@ -38,21 +38,21 @@ int execute_redirection(t_executor *e, t_redirectList *node)
 		if (fd == -1)
 			return (execution_error(strerror(errno), node->target), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
-			fatal_error(e->shell, DUP_ERROR);
+			fatal_error(shell, DUP_ERROR);
 		unlink(node->target);
 		close(fd);
 	}
 	return (0);
 }
 
-int handle_redirections(t_executor *e, t_redirectList *node)
+int handle_redirections(t_shell *shell, t_redirectList *node)
 {
 	t_redirectList *current;
 
 	current = node;
 	while(current)
 	{
-		if (execute_redirection(e, current))
+		if (execute_redirection(shell, current))
 			return (1);
 		current = current->next;
 	}
@@ -94,22 +94,22 @@ char **args_to_array(t_shell *shell, t_astNode *node)
 	return (array);
 }
 
-char *search_in_path(char *cmd, t_executor *e)
+char *search_in_path(char *cmd, t_shell *shell)
 {
 	char *path;
 	char **paths;
 	char *full_path;
 	int i;
 
-	path = get_env_var("PATH", e->shell);
+	path = get_env_var("PATH", shell);
 	if (!path)
 		return (NULL);
-	paths = gc_add(e->shell, ft_split(path, ':'));
+	paths = gc_add(shell, ft_split(path, ':'));
 	i = 0;
 	while(paths[i])
 	{
-		full_path = gc_add(e->shell, ft_strjoin(paths[i], "/"));
-		full_path = gc_add(e->shell, ft_strjoin(full_path, cmd));
+		full_path = gc_add(shell, ft_strjoin(paths[i], "/"));
+		full_path = gc_add(shell, ft_strjoin(full_path, cmd));
 		if (access(full_path, X_OK) == 0)
 			return(full_path);
 		++i;
@@ -131,12 +131,12 @@ int validate_path(char *path, char *cmd)
 }
 
 
-int get_cmd_path(char *cmd, t_executor *e, char **path)
+int get_cmd_path(char *cmd, t_shell *shell, char **path)
 {
 	if (ft_strchr(cmd, '/'))
 		*path = cmd;
 	else
-		*path = search_in_path(cmd, e);
+		*path = search_in_path(cmd, shell);
 	return(validate_path(*path, cmd));
 }
 
@@ -158,7 +158,7 @@ int get_exit_code(int status)
 	return 0;
 }
 
-int execute_cmd(t_executor *e, t_astNode *node)
+int execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child)
 {
 	char **args;
 	char *path;
@@ -168,9 +168,9 @@ int execute_cmd(t_executor *e, t_astNode *node)
 	// t_builtin_type builtin;
 	
 
-	args = args_to_array(e->shell, node);
+	args = args_to_array(shell, node);
 	// signals??
-	if (handle_redirections(e, node->u_data.command.redirects))
+	if (handle_redirections(shell, node->u_data.command.redirects))
 		return (1);
 	if (!args)
 		return (0);
@@ -179,17 +179,26 @@ int execute_cmd(t_executor *e, t_astNode *node)
 		// builtin = is_buildin(args[0]);
 		// if (builtin != NONE)
 		// 	return(execute_buildin(e, args));
-	code = get_cmd_path(args[0], e, &path);
+	code = get_cmd_path(args[0], shell, &path);
 	if (code)
 		return (code);
+	if (!exec_in_child)
+	{
+		ft_putendl_fd("execute without new fork", 2);
+		execve(path, args, shell->env);
+		execution_error(strerror(errno), args[0]);
+		if (errno == ENOENT)
+            exit(127);
+		exit(126);
+	}
 	pid = fork();
 	if (pid < 0)
-		fatal_error(e->shell, FORK_ERROR);
+		fatal_error(shell, FORK_ERROR);
 	if (pid == 0)
 	{
 		setup_child_signals();
-		execve(path, args, e->shell->env);
-		// ft_putendl_fd("aa", 2);
+		ft_putendl_fd("execute inside new fork", 2);
+		execve(path, args, shell->env);
 		execution_error(strerror(errno), args[0]);
 		if (errno == ENOENT)
             exit(127);

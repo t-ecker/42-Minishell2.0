@@ -7,6 +7,7 @@
 # define OPENDIR_ERROR "opendir failed"
 # define DUP_ERROR "dup failed"
 # define FORK_ERROR "fork failed"
+# define PIPE_ERROR "pipe failed"
 
 
 # define SYNTAX_ERROR "minishell: syntax error"
