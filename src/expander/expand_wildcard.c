@@ -135,7 +135,7 @@ void handle_word(char *str, int *pos, t_expand *e)
 
 	has_wildcard = false;
 	init_expander(&word, e->shell);
-	while(str[*pos] && !ft_isspace(str[*pos]))
+	while(str[*pos] && (!ft_isspace(str[*pos]) || word.insideDoubleQuote || word.insideSingleQuote))
 	{
 		if (str[*pos] == '\'' || str[*pos] == '"')
 		{

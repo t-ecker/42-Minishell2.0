@@ -177,7 +177,7 @@ t_builtin_type is_buildin(char *cmd)
 
 int execute_buildin(t_shell *shell, char **args, t_builtin_type type)
 {
-	ft_putendl_fd("execute builtin", 2);
+	// ft_putendl_fd("execute builtin", 2);
 	if (type == ECHOO)
 		return (ft_echo(args));
 	else if (type == CD)
@@ -190,8 +190,8 @@ int execute_buildin(t_shell *shell, char **args, t_builtin_type type)
 		return (ft_unset(args, shell));
 	else if (type == ENV)
 		return (ft_env(args, shell));
-	// else if (type == EXIT)
-	// 	return (ft_exit(args, shell));
+	else if (type == EXIT)
+		return (ft_exit(args, shell));
 	return (1);
 }
 

@@ -16,7 +16,7 @@ void execute_pipe_child(t_shell *shell, t_astNode *cmd, t_piper p, t_pipelineLis
 			fatal_error(shell, DUP_ERROR);
 		close(p.pipe_fd[1]);
 	}
-	execute_cmd(shell, cmd, false);
+	exit(execute_cmd(shell, cmd, false));
 }
 
 int wait_for_children(t_piper p)
@@ -53,6 +53,7 @@ int execute_pipe(t_shell *shell, t_astNode *node)
 
 	current = node->u_data.pipeline.commands;
 	p.prev_fd = -1;
+	p.last_pid = -1;
 	while(current)
 	{
 		next = current->next;

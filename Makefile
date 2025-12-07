@@ -46,7 +46,7 @@ SRC =		./src/main.c \
 			./src/builtins/echo.c \
 			./src/builtins/pwd.c \
 			./src/builtins/cd.c \
-# 			./src/builtins/exit.c \
+			./src/builtins/exit.c \
 
 
 # SRC_BONUS =	./src/
