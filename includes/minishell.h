@@ -35,7 +35,7 @@ typedef struct s_shell
 	char *input;
 	int exit_code;
 	int heredoc_counter;
-	char **env;	// env could be other type idk
+	t_env *env_list;
 	t_tokenList tokens;
 	t_astNode *ast;
 } t_shell;
