@@ -37,6 +37,7 @@ SRC =		./src/main.c \
 			./src/execution/execution.c \
 			./src/execution/execute_cmd.c \
 			./src/execution/execute_pipe.c \
+			./src/execution/execute_logical.c \
 			./src/execution/heredoc.c \
 
 

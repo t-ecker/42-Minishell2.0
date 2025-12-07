@@ -28,15 +28,15 @@ void loop(t_shell *shell)
 	while(1)
 	{
 		reset(shell);
-		// set_signals (maybe)
-		get_input(shell);
+		if (get_input(shell))
+			break;
 		if (input_validation(shell))
 		{
 			gc_free_all(shell);
 			ft_putendl_fd("valid input: ❌", 1); //debug
 			continue ;
 		}
-		if (!ft_strncmp(shell->input, "exit", ft_strlen(shell->input)))
+		if (!ft_strncmp(shell->input, "exit", ft_strlen(shell->input))) //must be removed later
 		{
 			gc_free_all(shell);
 			break;
@@ -45,7 +45,11 @@ void loop(t_shell *shell)
 		print_tokens(shell->tokens); //debug
 		parser(shell);
 		print_ast(shell->ast, 0);
-		ft_putendl_fd(shell->input, 1);
+		if (!execute_heredoc(shell, shell->ast))
+		{
+			gc_free_all(shell);
+			continue;
+		}
 		execute(shell, shell->ast);
 		gc_free_all(shell);
 	}

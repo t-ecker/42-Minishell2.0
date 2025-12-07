@@ -74,6 +74,7 @@ bool handle_heredoc(t_redirectList *redir, t_shell *shell)
 
 	if (redir->type != REDIR_HEREDOC)
 		return (true);
+	// setup_heredoc_signals();
 	filename = generate_heredoc_filename(shell);
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd < 0)
@@ -103,7 +104,7 @@ bool	check_heredoc(t_astNode *node, t_shell *shell)
 	return (true);
 }
 
-bool execute_heredoc(t_astNode *node, t_shell *shell)
+bool execute_heredoc(t_shell *shell, t_astNode *node)
 {
 	t_pipelineList *pipe;
 
@@ -116,18 +117,18 @@ bool execute_heredoc(t_astNode *node, t_shell *shell)
 		pipe = node->u_data.pipeline.commands;
 		while (pipe)
 		{
-			if (!execute_heredoc(pipe->command, shell))
+			if (!execute_heredoc(shell, pipe->command))
 				return (false);
 			pipe = pipe->next;
 		}
 	}
 	else if (node->type == AST_LOGICAL_OP)
 	{
-		if (!execute_heredoc(node->u_data.logical_op.left, shell) 
-			|| !execute_heredoc(node->u_data.logical_op.right, shell))
+		if (!execute_heredoc(shell, node->u_data.logical_op.left) 
+			|| !execute_heredoc(shell, node->u_data.logical_op.right))
 			return (false);
 	}
 	else if(node->type == AST_GROUP)
-		return (execute_heredoc(node->u_data.group.child, shell));
+		return (execute_heredoc(shell, node->u_data.group.child));
 	return (true);
 }
