@@ -16,10 +16,10 @@
 matching `'/\"'\nminishell: syntax error: unexpected end of file"
 
 # define MINISHELL_BASE "minishell: "
-# define CMD_NOT_FOUND_ERROR ": command not found"
-# define NO_SUCH_FILE_ERROR ": No such file or directory"
-# define IS_DIR_ERROR ": is a directory"
-# define PERMISSION_ERROR ": Permission denied"
+# define CMD_NOT_FOUND_ERROR "command not found"
+# define NO_SUCH_FILE_ERROR "No such file or directory"
+# define IS_DIR_ERROR "Is a directory"
+# define PERMISSION_ERROR "Permission denied"
 
 
 
