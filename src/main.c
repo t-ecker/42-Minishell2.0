@@ -35,6 +35,7 @@ void loop(t_shell *shell)
 		if (input_validation(shell))
 		{
 			gc_free_all(shell);
+			shell->exit_code = 2;
 			// ft_putendl_fd("valid input: ❌", 1); //debug
 			continue ;
 		}
