@@ -24,7 +24,16 @@ void disable_ctrl_c_echo(void)
     struct termios term;
     
     tcgetattr(STDIN_FILENO, &term);
-    term.c_lflag &= ~ECHOCTL;  // Disable echoing of control characters
+    term.c_lflag &= ~ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void enable_ctrl_c_echo(void)
+{
+    struct termios term;
+    
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag |= ECHOCTL;
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
@@ -37,6 +46,7 @@ void setup_main_signals(void)
 
 void setup_child_signals(void)
 {
+	// enable_ctrl_c_echo();
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
