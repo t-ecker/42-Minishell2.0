@@ -30,6 +30,7 @@ matching `'/\"'\nminishell: syntax error: unexpected end of file"
 
 void syntax_error(char *str);
 void syntax_error_unexpected_token(char c);
+void syntax_error_unexpected_token_str(char *c);
 void fatal_error(t_shell *shell, char *msg);
 void execution_error(char *str, char *cmd);
 void export_error(char c);
