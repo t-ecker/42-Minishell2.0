@@ -58,7 +58,7 @@ bool read_heredoc(int fd, char *target, t_shell *shell)
 		if (ft_strncmp(line, target, del_len) == 0 && line[del_len] == '\0')
 			break;
 		if (expand)
-			expander(&line, shell, false);
+			line = expand_var(line, shell);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 	}

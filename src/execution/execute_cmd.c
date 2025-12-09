@@ -4,7 +4,7 @@ int execute_redirection(t_shell *shell, t_redirectList *node)
 {
 	int fd;
 
-	expander(&node->target, shell, false);
+	expander(&node->target, shell);
 	if (node->type == REDIR_INPUT)
 	{
 		fd = open(node->target, O_RDONLY);
@@ -83,7 +83,7 @@ char **args_to_array(t_shell *shell, t_astNode *node)
 	current = list;
 	while(current)
 	{
-		expander(&current->value, shell, true);
+		expander(&current->value, shell);
 		if (current->value[0])
 		{
 			len = ft_strlen(current->value);
