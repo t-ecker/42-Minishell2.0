@@ -74,38 +74,60 @@ int handle_redirections(t_shell *shell, t_redirectList *node)
 	return (0);
 }
 
+t_argList *expand_args(t_shell *shell, t_argList *args)
+{
+	t_argList *expanded;
+	t_argList *res;
+	t_argList *last;
+
+	res = NULL;
+	last = NULL;
+
+	while(args)
+	{
+		expanded = expander(args->value, shell);
+		if (!res)
+		{
+			res = expanded;
+			last = res;
+		}
+		else
+			last->next = expanded;
+		while(last && last->next)
+			last = last->next;
+		args = args->next;
+	}
+	return (res);
+}
+
 char **args_to_array(t_shell *shell, t_astNode *node)
 {
-	t_argList *list;
+	t_argList *expanded_words;
 	t_argList *current;
 	char **array;
 	int size;
 	int i;
-	int len;
 
 	i = 0;
 	size = 0;
-	list = node->u_data.command.args;
-	if (!list)
+	expanded_words = expand_args(shell, node->u_data.command.args);
+	if (!expanded_words)
 		return NULL;
-	current = list;
+	current = expanded_words;
 	while(current)
 	{
 		++size;
 		current = current->next;
 	}
 	array = gc_malloc(shell, sizeof(char *) * (size + 1));
-	current = list;
+	current = expanded_words;
 	while(current)
 	{
-		expander(&current->value, shell);
-		if (current->value[0])
-		{
-			len = ft_strlen(current->value);
-			array[i] = gc_malloc(shell, len + 1);
-			ft_strlcpy(array[i], current->value, len + 1);
+		// if (current->value[0])
+		// {
+			array[i] = current->value;
 			++i;
-		}
+		// }
 		current = current->next;
 	}
 	array[i] = NULL;
