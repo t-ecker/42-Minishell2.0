@@ -52,6 +52,8 @@ char *expand_var(char *str, t_shell *shell)
 			++pos;
 			if (str[pos] == '?')
 				append_str(gc_add(shell, ft_itoa(shell->exit_code)), &e);
+			else if (str[pos] == '0')
+				append_str(gc_add(shell, ft_strdup("minishell")), &e);
 			else
 			{
 				handle_var(str, &pos, &e);
