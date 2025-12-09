@@ -18,6 +18,8 @@ void reset(t_shell *shell)
 {
 	setup_main_signals();
 	shell->input = NULL;
+	shell->wildcard_expansion_counter = 0;
+	shell->heredoc_counter = 0;
 	// if (!is_cursor_at_col_one())
 	// 		ft_putchar_fd('\n', STDOUT_FILENO);
 }

@@ -35,6 +35,7 @@ typedef struct s_shell
 	char *input;
 	int exit_code;
 	int heredoc_counter;
+	int wildcard_expansion_counter;
 	t_env *env_list;
 	t_tokenList tokens;
 	t_astNode *ast;
