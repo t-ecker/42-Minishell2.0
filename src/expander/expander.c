@@ -44,7 +44,7 @@ void expander(char **str, t_shell *shell, bool exp_wilcards)
 	res = expand_var(*str, shell);
 	args = word_split(res, shell);
 	if (exp_wilcards)
-		*str = expand_wildcard(*str, shell);
+		args = expand_wildcard(args, shell);
 	remove_quotes_from_list(args, shell);
 	// print_argList(args)
 }

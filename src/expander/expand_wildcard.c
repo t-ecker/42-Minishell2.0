@@ -102,74 +102,110 @@ t_fileList *find_wildcard_matches(char *pattern, t_shell *shell)
 	return (matches);
 }
 
-void process_word(t_expand word, bool has_wildcard, t_expand *e)
-{
-	t_fileList *file_matches;
-	t_fileList *current;
-
-	if (has_wildcard)
-	{
-		file_matches = find_wildcard_matches(word.res, e->shell);
-		if (file_matches)
-		{
-			current = file_matches;
-			while (current)
-			{
-				append_str(current->filename, e);
-				if (current->next)
-					append_char(' ', e);
-				current = current->next;
-			}
-		}
-		else
-			append_str(word.res, e);
-	}
-	else
-		append_str(word.res, e);
-}
-
-void handle_word(char *str, int *pos, t_expand *e)
-{
-	t_expand word;
-	bool has_wildcard;
-
-	has_wildcard = false;
-	init_expander(&word, e->shell);
-	while(str[*pos] && (!ft_isspace(str[*pos]) || word.insideDoubleQuote || word.insideSingleQuote))
-	{
-		if (str[*pos] == '\'' || str[*pos] == '"')
-		{
-			toggle_quote(str[*pos], &word.insideDoubleQuote, &word.insideSingleQuote);
-			append_char(str[*pos], &word);
-		}
-		else if (str[*pos] == '*' && !word.insideSingleQuote && !word.insideDoubleQuote)
-		{
-			has_wildcard = true;
-			append_char(str[*pos], &word);
-		}
-		else
-			append_char(str[*pos], &word);
-		++(*pos);
-	}
-	process_word(word, has_wildcard, e);
-}
-
-char *expand_wildcard(char *str, t_shell *shell)
+bool has_unquoted_wildcard(char *word)
 {
 	int pos;
-	t_expand e;
-
+	bool insideDoubleQuote;
+	bool insideSingleQuote;
+	
+	insideDoubleQuote = false;
+	insideSingleQuote = false;
 	pos = 0;
-	init_expander(&e, shell);
-	while (str[pos])
+	while(word[pos])
 	{
-		if (ft_isspace(str[pos]))
-		{
-			append_char(str[pos], &e);
-			++pos;
-			continue;
-		}
-		handle_word(str, &pos, &e);
+		if (word[pos] == '\'' || word[pos] == '"')
+			toggle_quote(word[pos], &insideDoubleQuote, &insideSingleQuote);
+		else if (word[pos] == '*' && !insideSingleQuote && !insideDoubleQuote)
+			return (true);
+		++pos;
 	}
-	return (e.res);
+	return (false);
+}
+
+t_argList *file_to_argList(t_fileList *matches, t_shell *shell)
+{
+	t_argList *args;
+	t_fileList *current;
+
+	args = NULL;
+	current = matches;
+	while(current)
+	{
+		add_arg_node(&args, current->filename, shell);
+		current = current->next;
+	}
+	return (args);
+}
+
+void sort_matches(t_fileList **list)
+{
+	t_fileList *current;
+	t_fileList *next;
+	int len1;
+	int len2;
+	int max_len;
+	char *swap;
+
+	current = *list;
+	while (current)
+	{
+		next = current->next;
+		while(next)
+		{
+			len1 = ft_strlen(current->filename);
+			len2 = ft_strlen(next->filename);
+			if (len1 > len2)
+				max_len = len1;
+			else
+				max_len = len2;
+			if (ft_strncmp(current->filename, next->filename, max_len) > 0)
+			{
+				swap = current->filename;
+				current->filename = next->filename;
+				next->filename = swap;
+			}
+			next = next->next;
+		}
+		current = current->next;
+	}
+}
+
+t_argList *process_word(char *word, t_shell *shell)
+{
+	t_fileList *matches;
+
+	if (!has_unquoted_wildcard(word))
+		return (create_args_node(word, shell));
+	matches = find_wildcard_matches(word, shell);
+	if (!matches)
+		return (create_args_node(word, shell));
+	sort_matches(&matches);
+	return (file_to_argList(matches, shell));
+}
+
+t_argList *expand_wildcard(t_argList *args, t_shell *shell)
+{
+	t_argList* current;
+	t_argList *last;
+	t_argList *res;
+	t_argList *expanded;
+
+	res = NULL;
+	last = NULL;
+	current = args;
+	while (current)
+	{
+		expanded = process_word(current->value, shell);
+		if (!res)
+		{
+			res = expanded;
+			last = res;
+		}
+		else
+			last->next = expanded;
+		while(last && last->next)
+			last = last->next;
+		current = current->next;
+	}
+	return (res);
 }
