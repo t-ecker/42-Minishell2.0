@@ -33,6 +33,7 @@ void syntax_error_unexpected_token(char c);
 void fatal_error(t_shell *shell, char *msg);
 void execution_error(char *str, char *cmd);
 void export_error(char c);
+void export_error_str(char *c);
 void exit_error_numeric(char *str);
 
 

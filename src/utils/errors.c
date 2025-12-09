@@ -24,6 +24,14 @@ void execution_error(char *str, char *cmd)
 	ft_putendl_fd(str, 2);
 }
 
+void export_error_str(char *c)
+{
+	ft_putstr_fd(MINISHELL_BASE, 2);
+	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd(c, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+}
+
 void export_error(char c)
 {
 	ft_putstr_fd(MINISHELL_BASE, 2);

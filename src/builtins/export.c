@@ -5,14 +5,14 @@ bool check_key(char *key)
 	int i;
 
 	if (!key || !*key)
-		return (export_error('='), false);
+		return (false);
 	if (!ft_isalpha(key[0]) && key[0] != '_')
-		return (export_error(key[0]), false);
+		return (false);
 	i = 1;
 	while(key[i])
 	{
 		if (!ft_isalnum(key[i]) && key[i] != '_')
-			return (export_error(key[i]), false);
+			return (false);
 		++i;
 	}
 	return (true);
@@ -24,21 +24,26 @@ int ft_export(char **args, t_shell *shell)
 	int i;
 	char *key;
 	char *value;
+	int exit_code;
 
+	exit_code = 0;
 	if (args[1] == NULL)
 	{
 		current = shell->env_list;
 		while(current)
 		{
-			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(current->key, 1);
-			if (current->value)
+			if (!(current->key[0] == '_' && !current->key[1]))
 			{
-				ft_putstr_fd("=\"", 1);
-				ft_putstr_fd(current->value, 1);
-				ft_putchar_fd('"', 1);
+				ft_putstr_fd("declare -x ", 1);
+				ft_putstr_fd(current->key, 1);
+				if (current->value)
+				{
+					ft_putstr_fd("=\"", 1);
+					ft_putstr_fd(current->value, 1);
+					ft_putchar_fd('"', 1);
+				}
+				ft_putendl_fd("", 1);
 			}
-			ft_putendl_fd("", 1);
 			current = current->next;
 		}
 	}
@@ -49,10 +54,16 @@ int ft_export(char **args, t_shell *shell)
 		{
 			get_key_value(shell, args[i], &key, &value);
 			if (!check_key(key))
-				return (free(key), free(value), 1);
-			add_env_node(shell, key, value);
+			{
+				export_error_str(args[i]);
+				exit_code = 1;
+				free(key);
+				free(value);
+			}
+			else
+				add_env_node(shell, key, value);
 			++i;
 		}
 	}
-	return (0);
+	return (exit_code);
 }
