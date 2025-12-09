@@ -67,3 +67,15 @@ char *remove_quotes(char *str, t_shell *shell)
 	}
 	return (e.res);
 }
+
+void remove_quotes_from_list(t_argList *args, t_shell *shell)
+{
+	t_argList *current;
+
+	current = args;
+	while(current)
+	{
+		current->value = remove_quotes(current->value, shell);
+		current = current->next;
+	}
+}

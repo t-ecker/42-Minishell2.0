@@ -25,6 +25,8 @@ void append_str(char *str, t_expand *e);
 void append_char(char c, t_expand *e);
 char *expand_wildcard(char *str, t_shell *shell);
 bool is_match(char *pattern, char *filename);
+t_argList *word_split(char *str, t_shell *shell);
+void remove_quotes_from_list(t_argList *args, t_shell *shell);
 
 
 

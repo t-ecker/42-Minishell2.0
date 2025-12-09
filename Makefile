@@ -29,6 +29,7 @@ SRC =		./src/main.c \
 			./src/parser/parse_group.c \
 			./src/expander/expander.c \
 			./src/expander/expand_variable.c \
+			./src/expander/word_split.c \
 			./src/expander/expand_wildcard.c \
 			./src/env/create_env_list.c \
 			./src/env/utils.c \
