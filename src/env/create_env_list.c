@@ -37,7 +37,8 @@ void add_env_node(t_shell *shell, char *key, char *value)
 	
 	if (!key) //correct?
 	{
-		free(value);
+		if (value)
+			free(value);
 		fatal_error(shell, MALLOC_ERROR);
 	}
 	node = create_env_node(shell, key, value);
@@ -82,7 +83,7 @@ void get_key_value(t_shell *shell, char *env_entry, char **key, char **value)
 {
 	char *equal_sign;
 	equal_sign = ft_strchr(env_entry, '=');
-	if (equal_sign)
+	if (env_entry[0] != '=' && equal_sign)
 	{
 		*key = ft_substr(env_entry, 0, equal_sign - env_entry);
 		if (!*key)
@@ -106,9 +107,9 @@ void get_key_value(t_shell *shell, char *env_entry, char **key, char **value)
 void check_env(t_shell *shell)
 {
 	if (!get_env_var("PWD", shell))
-		add_env_node(shell, gc_add(shell, ft_strdup("PWD")), gc_add(shell, getcwd(NULL, 0)));
+		add_env_node(shell, ft_strdup("PWD"), getcwd(NULL, 0));
 	if (!get_env_var("SHLVL", shell))
-		add_env_node(shell, gc_add(shell, ft_strdup("SHLVL")), gc_add(shell, ft_strdup("1")));
+		add_env_node(shell, ft_strdup("SHLVL"), ft_strdup("1"));
 }
 
 void create_env_list(t_shell *shell, char **envp)
