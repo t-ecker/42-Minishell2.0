@@ -6,6 +6,7 @@ int ft_env(char **args, t_shell *shell)
 
 	if (args[1] == NULL)
 	{
+		add_env_node(shell, ft_strdup("_"), ft_strdup("env"));
 		current = shell->env_list;
 		while(current)
 		{
