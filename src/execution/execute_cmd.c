@@ -3,43 +3,58 @@
 int execute_redirection(t_shell *shell, t_redirectList *node)
 {
 	int fd;
+	t_argList *expanded_target;
 
-	expander(&node->target, shell);
+	expanded_target = expander(node->target, shell);
+	if (!expanded_target || !expanded_target->value || !expanded_target->value[0] || expanded_target->next)
+		return(execution_error("ambiguous redirect", node->target), 1);
 	if (node->type == REDIR_INPUT)
 	{
-		fd = open(node->target, O_RDONLY);
+		fd = open(expanded_target->value, O_RDONLY);
 		if (fd == -1)
-			return (execution_error(strerror(errno), node->target), 1);
+			return (execution_error(strerror(errno), expanded_target->value), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			close(fd);
 			fatal_error(shell, DUP_ERROR);
+		}
 		close(fd);
 	}
 	else if (node->type == REDIR_OUTPUT)
 	{
-		fd = open(node->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(expanded_target->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-			return (execution_error(strerror(errno), node->target), 1);
+			return (execution_error(strerror(errno), expanded_target->value), 1);
 		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			close(fd);
 			fatal_error(shell, DUP_ERROR);
+		}
 		close(fd);
 	}
 	else if (node->type == REDIR_APPEND)
 	{
-		fd = open(node->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(expanded_target->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			return (execution_error(strerror(errno), node->target), 1);
+			return (execution_error(strerror(errno), expanded_target->value), 1);
 		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			close(fd);
 			fatal_error(shell, DUP_ERROR);
+		}
 		close(fd);
 	}
 	else if (node->type == REDIR_HEREDOC)
 	{
-		fd = open(node->target, O_RDONLY);
+		fd = open(expanded_target->value, O_RDONLY);
 		if (fd == -1)
-			return (execution_error(strerror(errno), node->target), 1);
+			return (execution_error(strerror(errno), expanded_target->value), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			close(fd);
 			fatal_error(shell, DUP_ERROR);
-		unlink(node->target);
+		}
+		unlink(expanded_target->value);
 		close(fd);
 	}
 	return (0);
