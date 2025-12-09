@@ -214,22 +214,31 @@ t_builtin_type is_buildin(char *cmd)
 
 int execute_buildin(t_shell *shell, char **args, t_builtin_type type)
 {
-	// ft_putendl_fd("execute builtin", 2);
+		char *last_arg;
+	int res;
+	int i;
+
+	res = 1;
 	if (type == ECHOO)
-		return (ft_echo(args));
+		res = ft_echo(args);
 	else if (type == CD)
-		return (ft_cd(args, shell));
+		res = ft_cd(args, shell);
 	else if (type == PWD)
-		return (ft_pwd(shell));
+		res = ft_pwd(shell);
 	if (type == EXPORT)
-		return (ft_export(args, shell));
+		res = ft_export(args, shell);
 	else if (type == UNSET)
-		return (ft_unset(args, shell));
+		res = ft_unset(args, shell);
 	else if (type == ENV)
-		return (ft_env(args, shell));
+		res = ft_env(args, shell);
 	else if (type == EXIT)
-		return (ft_exit(args, shell));
-	return (1);
+		res = ft_exit(args, shell);
+	i = 0;
+	while(args[i])
+		i++;
+	last_arg = args[i - 1];
+	add_env_node(shell, ft_strdup("_"), ft_strdup(last_arg));
+	return (res);
 }
 
 // does it print ^C???
@@ -264,6 +273,8 @@ int execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child)
 	int pid;
 	int status;
 	int code;
+	int i;
+	char *last_arg;
 	t_builtin_type builtin;
 	
 	args = args_to_array(shell, node);
@@ -281,6 +292,14 @@ int execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child)
 	code = get_cmd_path(args[0], shell, &path);
 	if (code)
 		return (code);
+	i = 0;
+	while(args[i])
+		i++;
+	if (i > 1)
+		last_arg = args[i - 1];
+	else
+		last_arg = path;
+	add_env_node(shell, ft_strdup("_"), ft_strdup(last_arg));
 	if (!exec_in_child)
 	{
 		// ft_putendl_fd("execute without new fork", 2);
