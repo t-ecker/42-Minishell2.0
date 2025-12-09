@@ -13,6 +13,14 @@ int handle_redir_syntax(char *str, int *pos)
 	skip_spaces(str, &i);
 	if (!str[i])
 		return (syntax_error(SYNTAX_REDIR_EOF_ERROR), 1);
+	if (str[i] == '&' && str[i + 1] == '&')
+		return(syntax_error_unexpected_token_str("&&"), 1);
+	if (str[i] == '|' && str[i + 1] == '|')
+		return(syntax_error_unexpected_token_str("||"), 1);
+	if (str[i] == '>' && str[i - 1] != '>' && str[i + 1])
+		return(syntax_error_unexpected_token_str(">>"), 1);
+	if (str[i] == '<' && str[i - 1] != '<' && str[i + 1])
+		return(syntax_error_unexpected_token_str("<<"), 1);
 	if (is_special_char(str[i]))
 		return (syntax_error_unexpected_token(str[i]), 1);
 	*pos = i - 1;

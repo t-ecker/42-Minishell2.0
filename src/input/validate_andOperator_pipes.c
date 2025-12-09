@@ -21,6 +21,10 @@ int check_pipes(char *str)
 	pos = 0;
 	if (str[0] == '|' || str[ft_strlen(str) - 1] == '|')
 	{
+		if (str[1] == '|')
+			return (syntax_error_unexpected_token_str("||"), 1);
+		if (str[1] == '&')
+			return (syntax_error_unexpected_token_str("|&"), 1);
 		syntax_error_unexpected_token('|');
 		return (1);
 	}
@@ -46,6 +50,8 @@ int check_and_operator(char *str)
 	pos = 0;
 	if (str[0] == '&' || str[ft_strlen(str) - 1] == '&')
 	{
+		if (str[1] == '&')
+			return (syntax_error_unexpected_token_str("&&"), 1);
 		syntax_error_unexpected_token('&');
 		return (1);
 	}
