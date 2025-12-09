@@ -1,21 +1,21 @@
 # include "../../includes/minishell.h"
 
-t_argList *create_args_node(char *value, t_parser *p)
+t_argList *create_args_node(char *value, t_shell *shell)
 {
 	t_argList *node;
 	
-	node = gc_malloc(p->shell, sizeof(t_argList));
-	node->value = gc_add(p->shell, ft_strdup(value));
+	node = gc_malloc(shell, sizeof(t_argList));
+	node->value = gc_add(shell, ft_strdup(value));
 	node->next = NULL;
 	return (node);
 }
 
-void add_arg_node(t_argList **head, char *value, t_parser *p)
+void add_arg_node(t_argList **head, char *value, t_shell *shell)
 {
 	t_argList *node;
 	t_argList *current_node;
 	
-	node = create_args_node(value, p);
+	node = create_args_node(value, shell);
 	if (*head == NULL)
 		*head = node;
 	else
@@ -47,7 +47,7 @@ t_astNode *parse_cmd(t_parser *p)
 		if (is_redir_token(p->current_token->type))
 			handle_redirection(&command_node->u_data.command.redirects, p);
 		else if (p->current_token->type == TOKEN_WORD)
-			add_arg_node(&command_node->u_data.command.args, p->current_token->value, p);
+			add_arg_node(&command_node->u_data.command.args, p->current_token->value, p->shell);
 		else
 			break ;
 		advance_token(p);

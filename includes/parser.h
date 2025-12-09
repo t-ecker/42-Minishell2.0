@@ -103,7 +103,8 @@ t_astNode *parse_group(t_parser *p);
 t_astNode *parse_pipe(t_parser *p);
 t_astNode *parse_cmd(t_parser *p);
 void handle_redirection(t_redirectList **head, t_parser *p);
-
+void add_arg_node(t_argList **head, char *value, t_shell *shell);
+t_argList *create_args_node(char *value, t_shell *shell);
 
 
 
