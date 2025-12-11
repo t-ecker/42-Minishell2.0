@@ -17,8 +17,10 @@ SRC =		./src/main.c \
 			./src/input/validate_quotes.c \
 			./src/input/validate_redirection.c \
 			./src/utils/errors.c \
+			./src/utils/execution_errors.c \
 			./src/utils/free.c \
-			./src/utils/utils.c \
+			./src/utils/others.c \
+			./src/utils/quote_handling.c \
 			./src/lexer/lexer.c \
 			./src/garbageCollector/garbageCollector.c \
 			./src/parser/parser.c \
@@ -31,14 +33,20 @@ SRC =		./src/main.c \
 			./src/expander/expand_variable.c \
 			./src/expander/word_split.c \
 			./src/expander/expand_wildcard.c \
+			./src/expander/wildcard_utils.c \
 			./src/env/create_env_list.c \
 			./src/env/utils.c \
 			./src/signals/signals.c \
+			./src/signals/utils.c \
 			./src/execution/execution.c \
 			./src/execution/execute_cmd.c \
+			./src/execution/execute_cmd_path.c \
+			./src/execution/execute_cmd_utils.c \
+			./src/execution/execute_redirection.c \
 			./src/execution/execute_pipe.c \
 			./src/execution/execute_logical.c \
 			./src/execution/heredoc.c \
+			./src/execution/heredoc_utils.c \
 			./src/builtins/env.c \
 			./src/builtins/export.c \
 			./src/builtins/unset.c \
