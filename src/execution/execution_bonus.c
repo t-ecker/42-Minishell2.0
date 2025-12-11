@@ -1,17 +1,5 @@
 #include "../../includes/minishell.h"
 
-int	error_unimplemented(bool is_logical)
-{
-	ft_putstr_fd(MINISHELL_BASE, 2);
-	if (is_logical)
-		ft_putstr_fd("Logicial Operators aren't", 2);
-	else
-		ft_putstr_fd("Command grouping isn't", 2);
-	ft_putstr_fd(" implemented in this version.", 2);
-	ft_putendl_fd(" Go to the Bonus to use this feature :)", 2);
-	return (1);
-}
-
 void	get_backup_fds(t_shell *shell, int *stdin_backup, int *stdout_backup)
 {
 	*stdin_backup = dup(STDIN_FILENO);
@@ -52,9 +40,9 @@ int	execute(t_shell *shell, t_ast_node *node)
 	else if (node->type == AST_PIPE)
 		res = execute_pipe(shell, node);
 	else if (node->type == AST_LOGICAL_OP)
-		res = error_unimplemented(true);
+		res = execute_logical(shell, node);
 	else if (node->type == AST_GROUP)
-		res = error_unimplemented(false);
+		res = execute(shell, node->u_data.group.child);
 	restore_fds(shell, stdin_backup, stdout_backup);
 	shell->exit_code = res;
 	return (res);
