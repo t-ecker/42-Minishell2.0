@@ -1,14 +1,11 @@
 #include "../../includes/minishell.h"
 
-void	exit_code(t_shell *shell, int code)
+void	toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote)
 {
-	shell->exit_code = code;
-}
-
-bool	is_special_char(char c)
-{
-	return (c == '|' || c == '&' || c == '(' || c == ')'
-		|| c == '<' || c == '>');
+	if (c == '\'' && !*openDoubleQuote)
+		toggle_bool(openSingleQuote);
+	else if (c == '"' && !*openSingleQuote)
+		toggle_bool(openDoubleQuote);
 }
 
 void	skip_quotes(char *str, int *pos)
@@ -23,25 +20,6 @@ void	skip_quotes(char *str, int *pos)
 		if (str[*pos] == quote)
 			(*pos)++;
 	}
-}
-
-void	skip_spaces(char *str, int *pos)
-{
-	while (str[*pos] && ft_isspace(str[*pos]))
-		(*pos)++;
-}
-
-void	toggle_bool(bool *input)
-{
-	*input = !(*input);
-}
-
-void	toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote)
-{
-	if (c == '\'' && !*openDoubleQuote)
-		toggle_bool(openSingleQuote);
-	else if (c == '"' && !*openSingleQuote)
-		toggle_bool(openDoubleQuote);
 }
 
 char	*remove_quotes(char *str, t_shell *shell)
@@ -78,4 +56,17 @@ void	remove_quotes_from_list(t_argList *args, t_shell *shell)
 		current->value = remove_quotes(current->value, shell);
 		current = current->next;
 	}
+}
+
+bool	found_quote(char c, bool *inside_double_quote,
+			bool *inside_single_quote, int *i)
+{
+	if (c == '\'' || c == '"')
+	{
+		toggle_quote(c, inside_double_quote, \
+			inside_single_quote);
+		++(*i);
+		return (true);
+	}
+	return (false);
 }
