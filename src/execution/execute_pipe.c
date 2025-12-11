@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	execute_pipe_child(t_shell *shell, t_astNode *cmd, t_piper p, \
+void	execute_pipe_child(t_shell *shell, t_ast_node *cmd, t_piper p, \
 		t_pipelineList *next)
 {
 	setup_child_signals();
@@ -45,7 +45,7 @@ void	execute_pipe_parent(t_piper *p, int pid, t_pipelineList *next)
 		p->last_pid = pid;
 }
 
-int	execute_pipe(t_shell *shell, t_astNode *node)
+int	execute_pipe(t_shell *shell, t_ast_node *node)
 {
 	t_piper			p;
 	t_pipelineList	*current;

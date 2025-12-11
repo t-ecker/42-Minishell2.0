@@ -35,7 +35,7 @@ typedef struct s_shell
 	int			wildcard_expansion_counter;
 	t_env		*env_list;
 	t_tokenList	tokens;
-	t_astNode	*ast;
+	t_ast_node	*ast;
 }	t_shell;
 
 // input

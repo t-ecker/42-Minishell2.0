@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-t_pipelineList	*create_pipe_node(t_astNode *command, t_parser *p)
+t_pipelineList	*create_pipe_node(t_ast_node *command, t_parser *p)
 {
 	t_pipelineList	*node;
 
@@ -10,7 +10,7 @@ t_pipelineList	*create_pipe_node(t_astNode *command, t_parser *p)
 	return (node);
 }
 
-void	add_pipe_node(t_pipelineList **head, t_astNode *command, t_parser *p)
+void	add_pipe_node(t_pipelineList **head, t_ast_node *command, t_parser *p)
 {
 	t_pipelineList	*node;
 	t_pipelineList	*current_node;
@@ -31,11 +31,11 @@ void	add_pipe_node(t_pipelineList **head, t_astNode *command, t_parser *p)
 // then if there is a pipe, it creates pipe node that stores 
 	// all commands after another in a list
 
-t_astNode	*parse_pipe(t_parser *p)
+t_ast_node	*parse_pipe(t_parser *p)
 {
-	t_astNode	*first_cmd;
-	t_astNode	*next_cmd;
-	t_astNode	*pipe_node;
+	t_ast_node	*first_cmd;
+	t_ast_node	*next_cmd;
+	t_ast_node	*pipe_node;
 
 	first_cmd = parse_group(p);
 	if (!check_token_type(p, TOKEN_PIPE))

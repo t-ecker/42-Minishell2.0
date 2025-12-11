@@ -5,11 +5,11 @@
 // then if there is a logical operator it parses right side.
 // combiens left and right into a logical node with the correct op_type
 
-t_astNode	*parse_logical(t_parser *p)
+t_ast_node	*parse_logical(t_parser *p)
 {
-	t_astNode		*left;
-	t_astNode		*right;
-	t_astNode		*logical_node;
+	t_ast_node		*left;
+	t_ast_node		*right;
+	t_ast_node		*logical_node;
 	t_logicalOpType	op_type;
 
 	left = parse_pipe(p);

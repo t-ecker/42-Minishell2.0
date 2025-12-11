@@ -91,7 +91,7 @@ bool	handle_heredoc(t_redirectList *redir, t_shell *shell)
 	return (true);
 }
 
-bool	check_heredoc(t_astNode *node, t_shell *shell)
+bool	check_heredoc(t_ast_node *node, t_shell *shell)
 {
 	t_redirectList	*redir;
 
@@ -105,7 +105,7 @@ bool	check_heredoc(t_astNode *node, t_shell *shell)
 	return (true);
 }
 
-bool	execute_heredoc(t_shell *shell, t_astNode *node)
+bool	execute_heredoc(t_shell *shell, t_ast_node *node)
 {
 	t_pipelineList	*pipe;
 

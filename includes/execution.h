@@ -29,11 +29,11 @@ typedef enum e_heredoc_status
 	HEREDOC_SIGNAL
 }	t_heredoc_status;
 
-bool	execute_heredoc(t_shell *shell, t_astNode *node);
-int		execute(t_shell *shell, t_astNode *node);
-int		execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child);
-int		execute_logical(t_shell *shell, t_astNode *node);
-int		execute_pipe(t_shell *shell, t_astNode *node);
+bool	execute_heredoc(t_shell *shell, t_ast_node *node);
+int		execute(t_shell *shell, t_ast_node *node);
+int		execute_cmd(t_shell *shell, t_ast_node *node, bool exec_in_child);
+int		execute_logical(t_shell *shell, t_ast_node *node);
+int		execute_pipe(t_shell *shell, t_ast_node *node);
 int		get_exit_code(int status);
 
 int		ft_env(char **args, t_shell *shell);

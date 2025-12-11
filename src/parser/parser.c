@@ -1,11 +1,11 @@
 #include "../../includes/minishell.h"
 
 // utils -----
-t_astNode	*create_ast_node(t_astNodeType type, t_parser *p)
+t_ast_node	*create_ast_node(t_ast_nodeType type, t_parser *p)
 {
-	t_astNode	*node;
+	t_ast_node	*node;
 
-	node = gc_malloc(p->shell, sizeof(t_astNode));
+	node = gc_malloc(p->shell, sizeof(t_ast_node));
 	node->type = type;
 	ft_memset(&node->u_data, 0, sizeof(node->u_data));
 	return (node);

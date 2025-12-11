@@ -27,7 +27,7 @@ void	restore_fds(t_shell *shell, int stdin_backup, int stdout_backup)
 	close(stdout_backup);
 }
 
-int	execute(t_shell *shell, t_astNode *node)
+int	execute(t_shell *shell, t_ast_node *node)
 {
 	int	stdin_backup;
 	int	stdout_backup;

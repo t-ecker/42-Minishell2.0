@@ -104,7 +104,7 @@ t_argList	*expand_args(t_shell *shell, t_argList *args)
 	return (res);
 }
 
-char	**args_to_array(t_shell *shell, t_astNode *node)
+char	**args_to_array(t_shell *shell, t_ast_node *node)
 {
 	t_argList	*expanded_words;
 	t_argList	*current;
@@ -265,7 +265,7 @@ int	get_exit_code(int status)
 	return (0);
 }
 
-int	execute_cmd(t_shell *shell, t_astNode *node, bool exec_in_child)
+int	execute_cmd(t_shell *shell, t_ast_node *node, bool exec_in_child)
 {
 	char			**args;
 	char			**env;

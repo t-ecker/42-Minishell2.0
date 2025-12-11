@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int	execute_logical(t_shell *shell, t_astNode *node)
+int	execute_logical(t_shell *shell, t_ast_node *node)
 {
 	int	left_res;
 

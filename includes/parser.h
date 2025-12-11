@@ -3,7 +3,7 @@
 
 # include "./lexer.h"
 
-typedef struct s_astNode	t_astNode;
+typedef struct s_astNode	t_ast_node;
 typedef struct s_shell		t_shell;
 
 typedef struct s_parser
@@ -42,7 +42,7 @@ typedef struct s_commandNode
 
 typedef struct s_pipelineList
 {
-	t_astNode				*command;
+	t_ast_node				*command;
 	struct s_pipelineList	*next;
 }	t_pipelineList;
 
@@ -60,26 +60,26 @@ typedef enum s_logicalOpType
 typedef struct s_logicalOpNode
 {
 	t_logicalOpType	op_type;
-	t_astNode		*left;
-	t_astNode		*right;
+	t_ast_node		*left;
+	t_ast_node		*right;
 }	t_logicalOpNode;
 
 typedef struct s_groupNode
 {
-	t_astNode	*child;
+	t_ast_node	*child;
 }	t_groupNode;
 
-typedef enum t_astNodeType
+typedef enum t_ast_nodeType
 {
 	AST_COMMAND,
 	AST_PIPE,
 	AST_LOGICAL_OP,
 	AST_GROUP
-}	t_astNodeType;
+}	t_ast_nodeType;
 
 typedef struct s_astNode
 {
-	t_astNodeType	type;
+	t_ast_nodeType	type;
 	union
 	{
 		t_commandNode		command;
@@ -87,7 +87,7 @@ typedef struct s_astNode
 		t_logicalOpNode		logical_op;
 		t_groupNode			group;
 	}	u_data;
-}		t_astNode;
+}		t_ast_node;
 
 // union shares memory for all node type structs. size is largest member,
 	// but all other members could fit as well.
@@ -96,12 +96,12 @@ typedef struct s_astNode
 // utils
 bool		check_token_type(t_parser *p, t_tokenType type);
 void		advance_token(t_parser *p);
-t_astNode	*create_ast_node(t_astNodeType type, t_parser *p);
+t_ast_node	*create_ast_node(t_ast_nodeType type, t_parser *p);
 
-t_astNode	*parse_logical(t_parser *p);
-t_astNode	*parse_group(t_parser *p);
-t_astNode	*parse_pipe(t_parser *p);
-t_astNode	*parse_cmd(t_parser *p);
+t_ast_node	*parse_logical(t_parser *p);
+t_ast_node	*parse_group(t_parser *p);
+t_ast_node	*parse_pipe(t_parser *p);
+t_ast_node	*parse_cmd(t_parser *p);
 void		handle_redirection(t_redirectList **head, t_parser *p);
 void		add_arg_node(t_argList **head, char *value, t_shell *shell);
 t_argList	*create_args_node(char *value, t_shell *shell);

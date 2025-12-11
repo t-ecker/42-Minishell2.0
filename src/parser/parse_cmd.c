@@ -38,9 +38,9 @@ bool	is_redir_token(t_tokenType type)
 // redirList stores all redirs in this block after another.
 // argList stores all args after another
 
-t_astNode	*parse_cmd(t_parser *p)
+t_ast_node	*parse_cmd(t_parser *p)
 {
-	t_astNode	*command_node;
+	t_ast_node	*command_node;
 
 	command_node = create_ast_node(AST_COMMAND, p);
 	while (p->current_token && p->current_token->type != TOKEN_EOF)

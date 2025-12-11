@@ -4,10 +4,10 @@
 // if so parse it from the very beginning
 // if not, just parse a cmd
 
-t_astNode	*parse_group(t_parser *p)
+t_ast_node	*parse_group(t_parser *p)
 {
-	t_astNode	*inner;
-	t_astNode	*group_node;
+	t_ast_node	*inner;
+	t_ast_node	*group_node;
 
 	if (check_token_type(p, TOKEN_LPAREN))
 	{
