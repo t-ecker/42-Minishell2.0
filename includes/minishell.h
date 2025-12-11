@@ -54,6 +54,8 @@ void	skip_spaces(char *str, int *pos);
 void	toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote);
 void	exit_code(t_shell *shell, int code);
 char	*remove_quotes(char *str, t_shell *shell);
+void	toggle_bool(bool *input);
+
 
 void	free_all(t_shell *shell);
 void	free_env(t_shell *shell);
@@ -61,6 +63,8 @@ void	free_env(t_shell *shell);
 void	setup_main_signals(void);
 void	setup_child_signals(void);
 void	setup_heredoc_signals(void);
+void	enable_ctrl_c_echo(void);
+void	disable_ctrl_c_echo(void);
 
 // lexer
 void	lexer(t_shell *shell);

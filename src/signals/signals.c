@@ -19,24 +19,6 @@ void	heredoc_signal_handler(int sig)
 	close(STDIN_FILENO);
 }
 
-void	disable_ctrl_c_echo(void)
-{
-	struct termios	term;
-
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
-void	enable_ctrl_c_echo(void)
-{
-	struct termios	term;
-
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag |= ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
 void	setup_main_signals(void)
 {
 	disable_ctrl_c_echo();

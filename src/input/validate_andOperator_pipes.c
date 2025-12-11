@@ -43,11 +43,8 @@ int	check_pipes(char *str)
 	return (0);
 }
 
-int	check_and_operator(char *str)
+int	precheck_and(char *str)
 {
-	int	pos;
-
-	pos = 0;
 	if (str[0] == '&' || str[ft_strlen(str) - 1] == '&')
 	{
 		if (str[1] == '&')
@@ -55,6 +52,16 @@ int	check_and_operator(char *str)
 		syntax_error_unexpected_token('&');
 		return (1);
 	}
+	return (0);
+}
+
+int	check_and_operator(char *str)
+{
+	int	pos;
+
+	pos = 0;
+	if (precheck_and(str))
+		return (1);
 	while (str[pos])
 	{
 		skip_quotes(str, &pos);
