@@ -1,11 +1,11 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int extract_var_name(char *start, char **var_name, t_shell *shell)
+int	extract_var_name(char *start, char **var_name, t_shell *shell)
 {
-	int len;
+	int	len;
 
 	len = 0;
-	while(start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
+	while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
 		++len;
 	if (len == 0)
 		return (0);
@@ -15,11 +15,11 @@ int extract_var_name(char *start, char **var_name, t_shell *shell)
 	return (len);
 }
 
-void handle_var(char *str, int *pos, t_expand *e)
+void	handle_var(char *str, int *pos, t_expand *e)
 {
-	char *var_name;
-	int var_len;
-	char *value;
+	char	*var_name;
+	int		var_len;
+	char	*value;
 
 	var_len = extract_var_name(&str[*pos], &var_name, e->shell);
 	if (var_len > 0)
@@ -33,10 +33,10 @@ void handle_var(char *str, int *pos, t_expand *e)
 		append_char('$', e);
 }
 
-char *expand_var(char *str, t_shell *shell)
+char	*expand_var(char *str, t_shell *shell)
 {
-	int pos;
-	t_expand e;
+	int			pos;
+	t_expand	e;
 
 	pos = 0;
 	init_expander(&e, shell);
@@ -57,7 +57,7 @@ char *expand_var(char *str, t_shell *shell)
 			else
 			{
 				handle_var(str, &pos, &e);
-				continue;
+				continue ;
 			}
 		}
 		else
