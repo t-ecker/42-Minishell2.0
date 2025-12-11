@@ -1,22 +1,22 @@
 #include "../../includes/minishell.h"
 
-char *generate_heredoc_filename(t_shell *shell)
+char	*generate_heredoc_filename(t_shell *shell)
 {
-	char *res;
+	char	*res;
 
 	res = gc_add(shell, ft_itoa(shell->heredoc_counter++));
 	res = gc_add(shell, ft_strjoin("/tmp/.heredoc_", res));
 	return (res);
 }
 
-bool clean_delimiter(char **delimiter, t_shell *shell)
+bool	clean_delimiter(char **delimiter, t_shell *shell)
 {
-	int i;
-	bool expand;
+	int		i;
+	bool	expand;
 
 	i = 0;
 	expand = true;
-	while((*delimiter)[i])
+	while ((*delimiter)[i])
 	{
 		if ((*delimiter)[i] == '\'' || (*delimiter)[i] == '"')
 			expand = false;
@@ -26,29 +26,31 @@ bool clean_delimiter(char **delimiter, t_shell *shell)
 	return (expand);
 }
 
-bool read_heredoc(int fd, char *target, t_shell *shell)
+bool	read_heredoc(int fd, char *target, t_shell *shell)
 {
-	char *line;
-	size_t del_len;
-	bool expand;
-	int stdin_backup;
+	char	*line;
+	size_t	del_len;
+	bool	expand;
+	int		stdin_backup;
 
 	g_signal_received = 0;
 	stdin_backup = dup(STDIN_FILENO);
 	setup_heredoc_signals();
 	expand = clean_delimiter(&target, shell);
 	del_len = ft_strlen(target);
-	while(1)
+	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 		{
 			dup2(stdin_backup, STDIN_FILENO);
-            close(stdin_backup);
+			close(stdin_backup);
 			if (g_signal_received != SIGINT)
 			{
-				ft_putstr_fd("minishell: warning: here-document ", STDERR_FILENO);
-				ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
+				ft_putstr_fd("minishell: warning: here-document ", \
+					STDERR_FILENO);
+				ft_putstr_fd("delimited by end-of-file (wanted `", \
+						STDERR_FILENO);
 				ft_putstr_fd(target, STDERR_FILENO);
 				ft_putendl_fd("')", STDERR_FILENO);
 			}
@@ -56,7 +58,7 @@ bool read_heredoc(int fd, char *target, t_shell *shell)
 		}
 		gc_add(shell, line);
 		if (ft_strncmp(line, target, del_len) == 0 && line[del_len] == '\0')
-			break;
+			break ;
 		if (expand)
 			line = expand_var(line, shell);
 		write(fd, line, ft_strlen(line));
@@ -66,15 +68,14 @@ bool read_heredoc(int fd, char *target, t_shell *shell)
 	return (setup_main_signals(), true);
 }
 
-bool handle_heredoc(t_redirectList *redir, t_shell *shell)
+bool	handle_heredoc(t_redirectList *redir, t_shell *shell)
 {
-	char *filename;
-	int fd;
-	bool success;
+	char	*filename;
+	int		fd;
+	bool	success;
 
 	if (redir->type != REDIR_HEREDOC)
 		return (true);
-	// setup_heredoc_signals();
 	filename = generate_heredoc_filename(shell);
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd < 0)
@@ -92,10 +93,10 @@ bool handle_heredoc(t_redirectList *redir, t_shell *shell)
 
 bool	check_heredoc(t_astNode *node, t_shell *shell)
 {
-	t_redirectList *redir;
+	t_redirectList	*redir;
 
 	redir = node->u_data.command.redirects;
-	while(redir)
+	while (redir)
 	{
 		if (!handle_heredoc(redir, shell))
 			return (false);
@@ -104,9 +105,9 @@ bool	check_heredoc(t_astNode *node, t_shell *shell)
 	return (true);
 }
 
-bool execute_heredoc(t_shell *shell, t_astNode *node)
+bool	execute_heredoc(t_shell *shell, t_astNode *node)
 {
-	t_pipelineList *pipe;
+	t_pipelineList	*pipe;
 
 	if (!node)
 		return (true);
@@ -124,11 +125,11 @@ bool execute_heredoc(t_shell *shell, t_astNode *node)
 	}
 	else if (node->type == AST_LOGICAL_OP)
 	{
-		if (!execute_heredoc(shell, node->u_data.logical_op.left) 
+		if (!execute_heredoc(shell, node->u_data.logical_op.left)
 			|| !execute_heredoc(shell, node->u_data.logical_op.right))
 			return (false);
 	}
-	else if(node->type == AST_GROUP)
+	else if (node->type == AST_GROUP)
 		return (execute_heredoc(shell, node->u_data.group.child));
 	return (true);
 }

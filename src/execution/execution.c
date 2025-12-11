@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void get_backup_fds(t_shell *shell, int *stdin_backup, int *stdout_backup)
+void	get_backup_fds(t_shell *shell, int *stdin_backup, int *stdout_backup)
 {
 	*stdin_backup = dup(STDIN_FILENO);
 	*stdout_backup = dup(STDOUT_FILENO);
@@ -14,9 +14,10 @@ void get_backup_fds(t_shell *shell, int *stdin_backup, int *stdout_backup)
 	}
 }
 
-void restore_fds(t_shell *shell, int stdin_backup, int stdout_backup)
+void	restore_fds(t_shell *shell, int stdin_backup, int stdout_backup)
 {
-	if (dup2(stdin_backup, STDIN_FILENO) == -1 || dup2(stdout_backup, STDOUT_FILENO) == -1)
+	if (dup2(stdin_backup, STDIN_FILENO) == -1
+		|| dup2(stdout_backup, STDOUT_FILENO) == -1)
 	{
 		close(stdin_backup);
 		close(stdout_backup);
@@ -26,14 +27,13 @@ void restore_fds(t_shell *shell, int stdin_backup, int stdout_backup)
 	close(stdout_backup);
 }
 
-int execute(t_shell *shell, t_astNode *node)
+int	execute(t_shell *shell, t_astNode *node)
 {
-	int		stdin_backup;
-	int		stdout_backup;
-	int res;
+	int	stdin_backup;
+	int	stdout_backup;
+	int	res;
 
 	get_backup_fds(shell, &stdin_backup, &stdout_backup);
-
 	res = 0;
 	if (node->type == AST_COMMAND)
 		res = execute_cmd(shell, node, true);
