@@ -1,14 +1,5 @@
 #include "../../includes/minishell.h"
 
-char	*generate_heredoc_filename(t_shell *shell)
-{
-	char	*res;
-
-	res = gc_add(shell, ft_itoa(shell->heredoc_counter++));
-	res = gc_add(shell, ft_strjoin("/tmp/.heredoc_", res));
-	return (res);
-}
-
 bool	clean_delimiter(char **delimiter, t_shell *shell)
 {
 	int		i;
@@ -42,27 +33,13 @@ bool	read_heredoc(int fd, char *target, t_shell *shell)
 	{
 		line = readline("> ");
 		if (!line)
-		{
-			dup2(stdin_backup, STDIN_FILENO);
-			close(stdin_backup);
-			if (g_signal_received != SIGINT)
-			{
-				ft_putstr_fd("minishell: warning: here-document ", \
-					STDERR_FILENO);
-				ft_putstr_fd("delimited by end-of-file (wanted `", \
-						STDERR_FILENO);
-				ft_putstr_fd(target, STDERR_FILENO);
-				ft_putendl_fd("')", STDERR_FILENO);
-			}
-			return (setup_main_signals(), false);
-		}
+			return (handle_readline_error(stdin_backup, target), false);
 		gc_add(shell, line);
 		if (ft_strncmp(line, target, del_len) == 0 && line[del_len] == '\0')
 			break ;
 		if (expand)
 			line = expand_var(line, shell);
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		ft_putendl_fd(line, fd);
 	}
 	close(stdin_backup);
 	return (setup_main_signals(), true);

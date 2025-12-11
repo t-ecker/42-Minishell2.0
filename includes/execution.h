@@ -36,6 +36,15 @@ int		execute_logical(t_shell *shell, t_ast_node *node);
 int		execute_pipe(t_shell *shell, t_ast_node *node);
 int		get_exit_code(int status);
 
+int		handle_redirections(t_shell *shell, t_redirectList *node);
+void	update_underscore(t_shell *shell, char **args, char *path);
+int		get_exit_code(int status);
+char	**args_to_array(t_shell *shell, t_ast_node *node);
+int		get_cmd_path(char *cmd, t_shell *shell, char **path);
+
+char	*generate_heredoc_filename(t_shell *shell);
+void	handle_readline_error(int stdin_backup, char *target);
+
 int		ft_env(char **args, t_shell *shell);
 int		ft_export(char **args, t_shell *shell);
 int		ft_unset(char **args, t_shell *shell);
