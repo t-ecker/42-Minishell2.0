@@ -43,6 +43,7 @@ t_argList	*expander(char *str, t_shell *shell)
 
 	res = expand_var(str, shell);
 	args = word_split(res, shell);
+	args = expand_wildcard(args, shell);
 	remove_quotes_from_list(args, shell);
 	return (args);
 }
