@@ -30,4 +30,12 @@ bool		is_match(char *pattern, char *filename);
 t_argList	*word_split(char *str, t_shell *shell);
 void		remove_quotes_from_list(t_argList *args, t_shell *shell);
 
+bool		found_quote(char c, bool *inside_double_quote,
+				bool *inside_single_quote, int *i);
+bool		has_unquoted_wildcard(char *word);
+void		add_match(t_fileList **head, char *filename, t_shell *shell);
+t_fileList	*create_filename_node(char *filename, t_shell *shell);
+void		sort_matches(t_fileList **list);
+t_argList	*file_to_arg_list(t_fileList *matches, t_shell *shell);
+
 #endif

@@ -33,6 +33,21 @@ void	handle_var(char *str, int *pos, t_expand *e)
 		append_char('$', e);
 }
 
+int	handle_dollar_sign(t_shell *shell, char *str, t_expand *e, int *pos)
+{
+	++(*pos);
+	if (str[*pos] == '?')
+		append_str(gc_add(shell, ft_itoa(shell->exit_code)), e);
+	else if (str[*pos] == '0')
+		append_str(gc_add(shell, ft_strdup("minishell")), e);
+	else
+	{
+		handle_var(str, pos, e);
+		return (1);
+	}
+	return (0);
+}
+
 char	*expand_var(char *str, t_shell *shell)
 {
 	int			pos;
@@ -50,16 +65,8 @@ char	*expand_var(char *str, t_shell *shell)
 		}
 		else if (str[pos] == '$' && !e.inside_single_quote)
 		{
-			++pos;
-			if (str[pos] == '?')
-				append_str(gc_add(shell, ft_itoa(shell->exit_code)), &e);
-			else if (str[pos] == '0')
-				append_str(gc_add(shell, ft_strdup("minishell")), &e);
-			else
-			{
-				handle_var(str, &pos, &e);
+			if (handle_dollar_sign(shell, str, &e, &pos))
 				continue ;
-			}
 		}
 		else
 			append_char(str[pos], &e);
