@@ -1,8 +1,8 @@
 #include "../../includes/minishell.h"
 
-t_gc_node *gc_create_node(t_shell *shell, void *ptr)
+t_gc_node	*gc_create_node(t_shell *shell, void *ptr)
 {
-	t_gc_node *node;
+	t_gc_node	*node;
 
 	node = malloc(sizeof(t_gc_node));
 	if (!node)
@@ -15,10 +15,10 @@ t_gc_node *gc_create_node(t_shell *shell, void *ptr)
 	return (node);
 }
 
-void *gc_malloc(t_shell *shell, size_t size)
+void	*gc_malloc(t_shell *shell, size_t size)
 {
-	void *ptr;
-	t_gc_node *node;
+	void		*ptr;
+	t_gc_node	*node;
 
 	ptr = malloc(size);
 	if (!ptr)
@@ -29,10 +29,10 @@ void *gc_malloc(t_shell *shell, size_t size)
 	return (ptr);
 }
 
-void *gc_add(t_shell *shell, void *ptr)
+void	*gc_add(t_shell *shell, void *ptr)
 {
-	t_gc_node *node;
-	
+	t_gc_node	*node;
+
 	if (!ptr)
 		fatal_error(shell, MALLOC_ERROR);
 	node = gc_create_node(shell, ptr);
@@ -41,9 +41,10 @@ void *gc_add(t_shell *shell, void *ptr)
 	return (ptr);
 }
 
-void *gc_realloc(t_shell *shell, void *ptr, size_t new_size, size_t bytes_to_cpy)
+void	*gc_realloc(t_shell *shell, void *ptr, size_t new_size,
+			size_t bytes_to_cpy)
 {
-	void *new_ptr;
+	void	*new_ptr;
 
 	new_ptr = gc_malloc(shell, new_size);
 	ft_memcpy(new_ptr, ptr, bytes_to_cpy);
@@ -51,16 +52,16 @@ void *gc_realloc(t_shell *shell, void *ptr, size_t new_size, size_t bytes_to_cpy
 	return (new_ptr);
 }
 
-void gc_free(t_shell *shell, void *ptr)
+void	gc_free(t_shell *shell, void *ptr)
 {
-	t_gc_node *current;
-	t_gc_node *prev;
+	t_gc_node	*current;
+	t_gc_node	*prev;
 
 	if (!ptr)
 		return ;
 	current = shell->gc.head;
 	prev = NULL;
-	while(current)
+	while (current)
 	{
 		if (current->ptr == ptr)
 		{
@@ -77,15 +78,15 @@ void gc_free(t_shell *shell, void *ptr)
 	}
 }
 
-void gc_free_all(t_shell *shell)
+void	gc_free_all(t_shell *shell)
 {
-	t_gc_node *current;
-	t_gc_node *next;
+	t_gc_node	*current;
+	t_gc_node	*next;
 
 	if (!shell->gc.head)
 		return ;
 	current = shell->gc.head;
-	while(current)
+	while (current)
 	{
 		next = current->next;
 		free(current->ptr);
