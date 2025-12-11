@@ -21,8 +21,7 @@ t_env	*create_env_node(t_shell *shell, char *key, char *value)
 	if (!node)
 	{
 		free(key);
-		free(value);
-		fatal_error(shell, MALLOC_ERROR);
+		return (free(value), fatal_error(shell, MALLOC_ERROR), NULL);
 	}
 	node->key = key;
 	node->value = value;
@@ -53,30 +52,6 @@ void	add_env_node(t_shell *shell, char *key, char *value)
 			current_node = current_node->next;
 		current_node->next = node;
 	}
-}
-
-void	update_shlvl(t_shell *shell, char *key, char **value)
-{
-	int		original_value;
-	char	*tmp;
-
-	original_value = ft_atoi(*value);
-	if (original_value > 1000)
-	{
-		ft_putstr_fd("minishell: warning: shell level (", 2);
-		ft_putnbr_fd(original_value, 2);
-		ft_putendl_fd(") too high, resetting to 1", 2);
-	}
-	if (!original_value || original_value < 0 || original_value > 1000)
-		original_value = 0;
-	tmp = ft_itoa(original_value + 1);
-	free(*value);
-	if (!tmp)
-	{
-		free(key);
-		fatal_error(shell, MALLOC_ERROR);
-	}
-	*value = tmp;
 }
 
 void	get_key_value(t_shell *shell, char *env_entry, char **key, char **value)

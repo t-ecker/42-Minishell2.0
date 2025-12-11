@@ -17,5 +17,6 @@ void	add_env_node(t_shell *shell, char *key, char *value);
 void	get_key_value(t_shell *shell, char *env_entry, \
 			char **key, char **value);
 void	delete_env_var(char *var_name, t_shell *shell);
+void	update_shlvl(t_shell *shell, char *key, char **value);
 
 #endif
