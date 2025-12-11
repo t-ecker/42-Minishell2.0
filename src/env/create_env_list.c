@@ -1,12 +1,12 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-t_env *create_env_node(t_shell *shell, char *key, char *value)
+t_env	*create_env_node(t_shell *shell, char *key, char *value)
 {
-	t_env *node;
-	t_env *current;
+	t_env	*node;
+	t_env	*current;
 
 	current = shell->env_list;
-	while(current)
+	while (current)
 	{
 		if (ft_strncmp(key, current->key, ft_strlen(key)) == 0
 			&& ft_strlen(key) == ft_strlen(current->key))
@@ -30,12 +30,12 @@ t_env *create_env_node(t_shell *shell, char *key, char *value)
 	return (node);
 }
 
-void add_env_node(t_shell *shell, char *key, char *value)
+void	add_env_node(t_shell *shell, char *key, char *value)
 {
-	t_env *node;
-	t_env *current_node;
-	
-	if (!key) //correct?
+	t_env	*node;
+	t_env	*current_node;
+
+	if (!key)
 	{
 		if (value)
 			free(value);
@@ -49,16 +49,16 @@ void add_env_node(t_shell *shell, char *key, char *value)
 	else
 	{
 		current_node = shell->env_list;
-		while(current_node->next)
+		while (current_node->next)
 			current_node = current_node->next;
 		current_node->next = node;
 	}
 }
 
-void update_shlvl(t_shell *shell, char *key, char **value)
+void	update_shlvl(t_shell *shell, char *key, char **value)
 {
-	int original_value;
-	char *tmp;
+	int		original_value;
+	char	*tmp;
 
 	original_value = ft_atoi(*value);
 	if (original_value > 1000)
@@ -79,9 +79,10 @@ void update_shlvl(t_shell *shell, char *key, char **value)
 	*value = tmp;
 }
 
-void get_key_value(t_shell *shell, char *env_entry, char **key, char **value)
+void	get_key_value(t_shell *shell, char *env_entry, char **key, char **value)
 {
-	char *equal_sign;
+	char	*equal_sign;
+
 	equal_sign = ft_strchr(env_entry, '=');
 	if (env_entry[0] != '=' && equal_sign)
 	{
@@ -104,7 +105,7 @@ void get_key_value(t_shell *shell, char *env_entry, char **key, char **value)
 	}
 }
 
-void check_env(t_shell *shell)
+void	check_env(t_shell *shell)
 {
 	if (!get_env_var("PWD", shell))
 		add_env_node(shell, ft_strdup("PWD"), getcwd(NULL, 0));
@@ -112,20 +113,20 @@ void check_env(t_shell *shell)
 		add_env_node(shell, ft_strdup("SHLVL"), ft_strdup("1"));
 }
 
-void create_env_list(t_shell *shell, char **envp)
+void	create_env_list(t_shell *shell, char **envp)
 {
-	int i;
-	char *key;
-	char *value;
+	int		i;
+	char	*key;
+	char	*value;
 
 	i = -1;
-	while(envp[++i])
+	while (envp[++i])
 	{
 		get_key_value(shell, envp[i], &key, &value);
-		if (value && ft_strncmp(key, "SHLVL", ft_strlen(key)) == 0 && ft_strlen(key) == 5)
+		if (value && ft_strncmp(key, "SHLVL", ft_strlen(key)) == 0
+			&& ft_strlen(key) == 5)
 			update_shlvl(shell, key, &value);
 		add_env_node(shell, key, value);
 	}
 	check_env(shell);
 }
-
