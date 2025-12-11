@@ -33,8 +33,6 @@ SRC =		./src/main.c \
 			./src/expander/expand_wildcard.c \
 			./src/env/create_env_list.c \
 			./src/env/utils.c \
-			./src/debug/token_debug.c \
-			./src/debug/ast_debug.c \
 			./src/signals/signals.c \
 			./src/execution/execution.c \
 			./src/execution/execute_cmd.c \
