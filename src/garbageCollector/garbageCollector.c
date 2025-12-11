@@ -77,21 +77,3 @@ void	gc_free(t_shell *shell, void *ptr)
 		current = current->next;
 	}
 }
-
-void	gc_free_all(t_shell *shell)
-{
-	t_gc_node	*current;
-	t_gc_node	*next;
-
-	if (!shell->gc.head)
-		return ;
-	current = shell->gc.head;
-	while (current)
-	{
-		next = current->next;
-		free(current->ptr);
-		free(current);
-		current = next;
-	}
-	shell->gc.head = NULL;
-}
