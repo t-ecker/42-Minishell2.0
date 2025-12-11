@@ -1,23 +1,23 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 // utils -----
-t_astNode *create_astNode(t_astNodeType type, t_parser *p)
+t_astNode	*create_ast_node(t_astNodeType type, t_parser *p)
 {
-	t_astNode *node;
-	
+	t_astNode	*node;
+
 	node = gc_malloc(p->shell, sizeof(t_astNode));
 	node->type = type;
 	ft_memset(&node->u_data, 0, sizeof(node->u_data));
 	return (node);
 }
 
-void advance_token(t_parser *p)
+void	advance_token(t_parser *p)
 {
 	if (p->current_token)
 		p->current_token = p->current_token->next;
 }
 
-bool check_token_type(t_parser *p, t_tokenType type)
+bool	check_token_type(t_parser *p, t_tokenType type)
 {
 	return (p->current_token && p->current_token->type == type);
 }
@@ -31,12 +31,11 @@ bool check_token_type(t_parser *p, t_tokenType type)
 // - Pipes
 // - Logical OR / AND
 
-void parser(t_shell *shell)
+void	parser(t_shell *shell)
 {
-	t_parser p;
-	
+	t_parser	p;
+
 	p.shell = shell;
 	p.current_token = shell->tokens.head;
-
 	shell->ast = parse_logical(&p);
 }
