@@ -44,10 +44,11 @@ char	*expand_var(char *str, t_shell *shell)
 	{
 		if (str[pos] == '\'' || str[pos] == '"')
 		{
-			toggle_quote(str[pos], &e.insideDoubleQuote, &e.insideSingleQuote);
+			toggle_quote(str[pos], &e.inside_double_quote, \
+				&e.inside_single_quote);
 			append_char(str[pos], &e);
 		}
-		else if (str[pos] == '$' && !e.insideSingleQuote)
+		else if (str[pos] == '$' && !e.inside_single_quote)
 		{
 			++pos;
 			if (str[pos] == '?')

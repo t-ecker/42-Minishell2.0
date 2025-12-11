@@ -9,13 +9,13 @@ char	*build_word(char *str, int *pos, t_shell *shell)
 	{
 		if (str[*pos] == '\'' || str[*pos] == '"')
 		{
-			toggle_quote(str[*pos], &word.insideDoubleQuote, \
-				&word.insideSingleQuote);
+			toggle_quote(str[*pos], &word.inside_double_quote, \
+				&word.inside_single_quote);
 			append_char(str[(*pos)++], &word);
 			continue ;
 		}
 		if ((ft_isspace(str[*pos]) || str[*pos] == '\n')
-			&& !word.insideSingleQuote && !word.insideDoubleQuote)
+			&& !word.inside_single_quote && !word.inside_double_quote)
 			break ;
 		append_char(str[*pos], &word);
 		(*pos)++;
