@@ -18,12 +18,48 @@ bool	check_key(char *key)
 	return (true);
 }
 
-int	ft_export(char **args, t_shell *shell)
+void	print_var(char *key, char *value)
 {
-	t_env	*current;
+	ft_putstr_fd("declare -x ", 1);
+	ft_putstr_fd(key, 1);
+	if (value)
+	{
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(value, 1);
+		ft_putchar_fd('"', 1);
+	}
+	ft_putendl_fd("", 1);
+}
+
+int	process_new_var(t_shell *shell, char **args)
+{
 	int		i;
 	char	*key;
 	char	*value;
+	int		exit_code;
+
+	exit_code = 0;
+	i = 1;
+	while (args[i])
+	{
+		get_key_value(shell, args[i], &key, &value);
+		if (!check_key(key))
+		{
+			export_error_str(args[i]);
+			exit_code = 1;
+			free(key);
+			free(value);
+		}
+		else
+			add_env_node(shell, key, value);
+		++i;
+	}
+	return (exit_code);
+}
+
+int	ft_export(char **args, t_shell *shell)
+{
+	t_env	*current;
 	int		exit_code;
 
 	exit_code = 0;
@@ -33,37 +69,11 @@ int	ft_export(char **args, t_shell *shell)
 		while (current)
 		{
 			if (!(current->key[0] == '_' && !current->key[1]))
-			{
-				ft_putstr_fd("declare -x ", 1);
-				ft_putstr_fd(current->key, 1);
-				if (current->value)
-				{
-					ft_putstr_fd("=\"", 1);
-					ft_putstr_fd(current->value, 1);
-					ft_putchar_fd('"', 1);
-				}
-				ft_putendl_fd("", 1);
-			}
+				print_var(current->key, current->value);
 			current = current->next;
 		}
 	}
 	else
-	{
-		i = 1;
-		while (args[i])
-		{
-			get_key_value(shell, args[i], &key, &value);
-			if (!check_key(key))
-			{
-				export_error_str(args[i]);
-				exit_code = 1;
-				free(key);
-				free(value);
-			}
-			else
-				add_env_node(shell, key, value);
-			++i;
-		}
-	}
+		exit_code = process_new_var(shell, args);
 	return (exit_code);
 }

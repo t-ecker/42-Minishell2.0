@@ -21,9 +21,8 @@ int	ft_echo(char **args)
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], 1);
-		if (args[i + 1] != NULL)
+		if (args[++i] != NULL)
 			ft_putchar_fd(' ', 1);
-		++i;
 	}
 	if (flag == 0)
 		ft_putchar_fd('\n', 1);
