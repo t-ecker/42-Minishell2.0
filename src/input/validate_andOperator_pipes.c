@@ -1,8 +1,8 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int handle_pipe_syntax(char *str, int *pos)
+int	handle_pipe_syntax(char *str, int *pos)
 {
-	int skip;
+	int	skip;
 
 	skip = 1;
 	if (str[*pos + 1] && str[*pos + 1] == '|')
@@ -14,9 +14,9 @@ int handle_pipe_syntax(char *str, int *pos)
 	return (0);
 }
 
-int check_pipes(char *str)
+int	check_pipes(char *str)
 {
-	int pos;
+	int	pos;
 
 	pos = 0;
 	if (str[0] == '|' || str[ft_strlen(str) - 1] == '|')
@@ -28,14 +28,14 @@ int check_pipes(char *str)
 		syntax_error_unexpected_token('|');
 		return (1);
 	}
-	while(str[pos])
+	while (str[pos])
 	{
 		skip_quotes(str, &pos);
 		if (str[pos] == '|')
 		{
 			if (handle_pipe_syntax(str, &pos))
 				return (1);
-			continue;
+			continue ;
 		}
 		if (str[pos])
 			pos++;
@@ -43,9 +43,9 @@ int check_pipes(char *str)
 	return (0);
 }
 
-int check_and_operator(char *str)
+int	check_and_operator(char *str)
 {
-	int pos;
+	int	pos;
 
 	pos = 0;
 	if (str[0] == '&' || str[ft_strlen(str) - 1] == '&')
@@ -55,7 +55,7 @@ int check_and_operator(char *str)
 		syntax_error_unexpected_token('&');
 		return (1);
 	}
-	while(str[pos])
+	while (str[pos])
 	{
 		skip_quotes(str, &pos);
 		if (str[pos] == '&')
@@ -66,7 +66,7 @@ int check_and_operator(char *str)
 			skip_spaces(str, &pos);
 			if (str[pos] == '|' || str[pos] == '&' || str[pos] == ')')
 				return (syntax_error_unexpected_token(str[pos]), 1);
-			continue;
+			continue ;
 		}
 		if (str[pos])
 			pos++;

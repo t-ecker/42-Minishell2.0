@@ -1,9 +1,9 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int handle_redir_syntax(char *str, int *pos)
+int	handle_redir_syntax(char *str, int *pos)
 {
-	int i;
-	char c;
+	int		i;
+	char	c;
 
 	i = *pos;
 	c = str[i];
@@ -14,25 +14,25 @@ int handle_redir_syntax(char *str, int *pos)
 	if (!str[i])
 		return (syntax_error(SYNTAX_REDIR_EOF_ERROR), 1);
 	if (str[i] == '&' && str[i + 1] == '&')
-		return(syntax_error_unexpected_token_str("&&"), 1);
+		return (syntax_error_unexpected_token_str("&&"), 1);
 	if (str[i] == '|' && str[i + 1] == '|')
-		return(syntax_error_unexpected_token_str("||"), 1);
+		return (syntax_error_unexpected_token_str("||"), 1);
 	if (str[i] == '>' && str[i - 1] != '>' && str[i + 1])
-		return(syntax_error_unexpected_token_str(">>"), 1);
+		return (syntax_error_unexpected_token_str(">>"), 1);
 	if (str[i] == '<' && str[i - 1] != '<' && str[i + 1])
-		return(syntax_error_unexpected_token_str("<<"), 1);
+		return (syntax_error_unexpected_token_str("<<"), 1);
 	if (is_special_char(str[i]))
 		return (syntax_error_unexpected_token(str[i]), 1);
 	*pos = i - 1;
-	return(0);
+	return (0);
 }
 
-int check_redir(char *str)
+int	check_redir(char *str)
 {
-	int pos;
+	int	pos;
 
 	pos = 0;
-	while(str[pos])
+	while (str[pos])
 	{
 		skip_quotes(str, &pos);
 		if (str[pos] == '>' || str[pos] == '<')

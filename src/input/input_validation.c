@@ -1,6 +1,6 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int input_validation(t_shell *shell)
+int	input_validation(t_shell *shell)
 {
 	shell->input = gc_add(shell, ft_strtrim(shell->input, " \t"));
 	if (shell->input[0] == '\0')
@@ -15,6 +15,5 @@ int input_validation(t_shell *shell)
 		return (exit_code(shell, 258), 1);
 	if (check_and_operator(shell->input))
 		return (exit_code(shell, 258), 1);
-	// ft_putendl_fd("valid input: ✅", 1); //debug
 	return (0);
 }

@@ -1,6 +1,6 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int get_input(t_shell *shell)
+int	get_input(t_shell *shell)
 {
 	shell->input = readline("minishell: ");
 	if (!shell->input)

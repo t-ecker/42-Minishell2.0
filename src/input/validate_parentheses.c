@@ -1,6 +1,6 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int handle_parenthese_syntax(char *str, int *pos)
+int	handle_parenthese_syntax(char *str, int *pos)
 {
 	(*pos)++;
 	skip_spaces(str, pos);
@@ -9,14 +9,14 @@ int handle_parenthese_syntax(char *str, int *pos)
 	return (0);
 }
 
-int check_parentheses(char *str)
+int	check_parentheses(char *str)
 {
-	int pos;
-	int count;
+	int	pos;
+	int	count;
 
 	pos = 0;
 	count = 0;
-	while(str[pos])
+	while (str[pos])
 	{
 		skip_quotes(str, &pos);
 		if (str[pos] == '(')
@@ -24,7 +24,7 @@ int check_parentheses(char *str)
 			count++;
 			if (handle_parenthese_syntax(str, &pos))
 				return (1);
-			continue;
+			continue ;
 		}
 		else if (str[pos] == ')')
 			if (--count < 0)
@@ -34,5 +34,5 @@ int check_parentheses(char *str)
 	}
 	if (count != 0)
 		return (syntax_error(SYNTAX_PAREN_ERROR), 1);
-	return 0;
+	return (0);
 }
