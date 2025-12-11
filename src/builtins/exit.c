@@ -1,38 +1,39 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-long ft_atol(char *str)
+long	ft_atol(char *str)
 {
-    long sign = 1;
-    long result = 0;
+	long	sign;
+	long	result;
 
-    if (*str == '+' || *str == '-')
-        if (*str++ == '-')
-            sign = -1;
-
-    while (*str >= '0' && *str <= '9')
-    {
-        result = result * 10 + (*str - '0');
-        str++;
-    }
-    return result * sign;
+	sign = 1;
+	result = 0;
+	if (*str == '+' || *str == '-')
+		if (*str++ == '-')
+			sign = -1;
+	while (*str >= '0' && *str <= '9')
+	{
+		result = result * 10 + (*str - '0');
+		str++;
+	}
+	return (result * sign);
 }
 
-bool would_overflow(char *arg)
+bool	would_overflow(char *arg)
 {
-	int i;
-	int sign;
-	int len;
-	char *relevant_part;
+	int		i;
+	int		sign;
+	int		len;
+	char	*relevant_part;
 
 	i = 0;
 	sign = 1;
 	if (arg[i] == '+' || arg[i] == '-')
 	{
 		if (arg[i] == '-')
-			sign = -1;	
+			sign = -1;
 		++i;
 	}
-	while(arg[i] == '0')
+	while (arg[i] == '0')
 		++i;
 	relevant_part = &arg[i];
 	len = ft_strlen(relevant_part);
@@ -45,27 +46,27 @@ bool would_overflow(char *arg)
 	return (ft_strncmp(relevant_part, "9223372036854775808", 19) > 0);
 }
 
-int check_arg(char *arg)
+int	check_arg(char *arg)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (arg[0] == '+' || arg[0] == '-')
 		++i;
 	if (!arg[i])
-		return(exit_error_numeric(arg), 2);
-	while(arg[i])
+		return (exit_error_numeric(arg), 2);
+	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
-			return(exit_error_numeric(arg), 2);
+			return (exit_error_numeric(arg), 2);
 		++i;
 	}
 	if (would_overflow(arg))
-		return(exit_error_numeric(arg), 2);
+		return (exit_error_numeric(arg), 2);
 	return ((unsigned char)ft_atol(arg));
 }
 
-int ft_exit(char **args, t_shell *shell)
+int	ft_exit(char **args, t_shell *shell)
 {
 	if (args[1])
 	{
