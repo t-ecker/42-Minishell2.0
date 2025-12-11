@@ -1,12 +1,12 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-void free_env(t_shell *shell)
+void	free_env(t_shell *shell)
 {
-	t_env *current;
-	t_env *next;
+	t_env	*current;
+	t_env	*next;
 
 	current = shell->env_list;
-	while(current)
+	while (current)
 	{
 		free(current->key);
 		free(current->value);
@@ -16,7 +16,7 @@ void free_env(t_shell *shell)
 	}
 }
 
-void free_all(t_shell *shell)
+void	free_all(t_shell *shell)
 {
 	gc_free_all(shell);
 	free_env(shell);

@@ -1,63 +1,63 @@
-# include "../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-
-void exit_code(t_shell *shell, int code)
+void	exit_code(t_shell *shell, int code)
 {
 	shell->exit_code = code;
 }
 
-bool is_special_char(char c) {
-    return c == '|' || c == '&' || c == '(' || c == ')' || 
-           c == '<' || c == '>';
+bool	is_special_char(char c)
+{
+	return (c == '|' || c == '&' || c == '(' || c == ')'
+		|| c == '<' || c == '>');
 }
 
-void skip_quotes(char *str, int *pos)
+void	skip_quotes(char *str, int *pos)
 {
-	char quote;
+	char	quote;
 
 	if (str[*pos] == '\'' || str[*pos] == '"')
 	{
 		quote = str[(*pos)++];
-		while(str[*pos] && str[*pos] != quote)
+		while (str[*pos] && str[*pos] != quote)
 			(*pos)++;
 		if (str[*pos] == quote)
-            (*pos)++;
+			(*pos)++;
 	}
 }
 
-void skip_spaces(char *str, int *pos)
+void	skip_spaces(char *str, int *pos)
 {
-	while(str[*pos] && ft_isspace(str[*pos]))
+	while (str[*pos] && ft_isspace(str[*pos]))
 		(*pos)++;
 }
 
-void toggleBool(bool *input)
+void	toggle_bool(bool *input)
 {
 	*input = !(*input);
 }
 
-void toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote)
+void	toggle_quote(char c, bool *openDoubleQuote, bool *openSingleQuote)
 {
 	if (c == '\'' && !*openDoubleQuote)
-		toggleBool(openSingleQuote);
+		toggle_bool(openSingleQuote);
 	else if (c == '"' && !*openSingleQuote)
-		toggleBool(openDoubleQuote);
+		toggle_bool(openDoubleQuote);
 }
 
-char *remove_quotes(char *str, t_shell *shell)
+char	*remove_quotes(char *str, t_shell *shell)
 {
-	int pos;
-	t_expand e;
-	char quote;
+	int			pos;
+	t_expand	e;
+	char		quote;
 
 	init_expander(&e, shell);
 	pos = 0;
 	while (str[pos])
 	{
-		if (str[pos] == '\'' || str[pos] =='"')
+		if (str[pos] == '\'' || str[pos] == '"')
 		{
 			quote = str[pos++];
-			while(str[pos] && str[pos] != quote)
+			while (str[pos] && str[pos] != quote)
 				append_char(str[pos++], &e);
 			if (str[pos] == quote)
 				++pos;
@@ -68,12 +68,12 @@ char *remove_quotes(char *str, t_shell *shell)
 	return (e.res);
 }
 
-void remove_quotes_from_list(t_argList *args, t_shell *shell)
+void	remove_quotes_from_list(t_argList *args, t_shell *shell)
 {
-	t_argList *current;
+	t_argList	*current;
 
 	current = args;
-	while(current)
+	while (current)
 	{
 		current->value = remove_quotes(current->value, shell);
 		current = current->next;
