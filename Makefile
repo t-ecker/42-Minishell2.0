@@ -111,7 +111,7 @@ $(NAME): $(LIBFT) $(OBJ_FILES)
 	$(CC) $(OBJ_FILES) $(LIBFT) $(LDFLAGS) $(CFLAGS) -o $@
 
 $(LIBFT):
-	@make extra -C $(LIBFT_DIR)
+	@$(MAKE) extra -C $(LIBFT_DIR)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
@@ -127,11 +127,11 @@ $(NAME_BONUS):	$(LIBFT) $(OBJ_FILES_BONUS)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@make clean -C $(LIBFT_DIR)
+	@$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
 	@rm -f $(NAME) $(NAME_BONUS)
-	@make fclean -C $(LIBFT_DIR)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
 
 re: fclean all
 
