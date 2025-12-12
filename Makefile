@@ -106,18 +106,12 @@ OBJ_FILES		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 OBJ_FILES_BONUS	=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_BONUS))
 
 all: $(NAME)
-	clear;
 
 $(NAME): $(LIBFT) $(OBJ_FILES)
 	$(CC) $(OBJ_FILES) $(LIBFT) $(LDFLAGS) $(CFLAGS) -o $@
 
-$(LIBFT):	$(LIBFT_DIR)/.git
+$(LIBFT):
 	@make extra -C $(LIBFT_DIR)
-
-$(LIBFT_DIR)/.git:
-	@echo "\033[33mInitializing Libft submodule...\033[0m"
-	@git submodule update --init --recursive
-	@echo "\033[32mLibft submodule initialized.\033[0m"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
@@ -127,7 +121,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 bonus:	$(NAME_BONUS)
-	clear;
 
 $(NAME_BONUS):	$(LIBFT) $(OBJ_FILES_BONUS) 
 	$(CC) $(OBJ_FILES_BONUS) $(LIBFT) $(LDFLAGS) $(CFLAGS) -o $@
