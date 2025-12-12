@@ -107,8 +107,6 @@ OBJ_FILES_BONUS	=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_BONUS))
 
 all: $(NAME)
 	clear;
-	@$(MAKE) loading
-	clear;
 
 $(NAME): $(LIBFT) $(OBJ_FILES)
 	$(CC) $(OBJ_FILES) $(LIBFT) $(LDFLAGS) $(CFLAGS) -o $@
@@ -130,8 +128,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 bonus:	$(NAME_BONUS)
 	clear;
-	@$(MAKE) loading
-	clear;
 
 $(NAME_BONUS):	$(LIBFT) $(OBJ_FILES_BONUS) 
 	$(CC) $(OBJ_FILES_BONUS) $(LIBFT) $(LDFLAGS) $(CFLAGS) -o $@
@@ -146,4 +142,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re loading bonus
+.PHONY: all clean fclean re bonus
