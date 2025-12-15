@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 12:10:36 by tecker            #+#    #+#             */
-/*   Updated: 2025/12/12 12:10:37 by tecker           ###   ########.fr       */
+/*   Updated: 2025/12/15 15:09:42 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ typedef struct s_argList
 typedef enum s_redirectType
 {
 	REDIR_ERROR = -1,
-	REDIR_INPUT,// <
-	REDIR_OUTPUT,// >
-	REDIR_APPEND,// >>
+	REDIR_INPUT,
+	REDIR_OUTPUT,
+	REDIR_APPEND,
 	REDIR_HEREDOC
 }	t_redirectType;
 
