@@ -55,6 +55,7 @@ int	execute_pipe(t_shell *shell, t_ast_node *node)
 	current = node->u_data.pipeline.commands;
 	p.prev_fd = -1;
 	p.last_pid = -1;
+	signal(SIGINT, SIG_IGN);
 	while (current)
 	{
 		next = current->next;

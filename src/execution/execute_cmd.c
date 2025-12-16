@@ -94,7 +94,8 @@ int	execute_cmd(t_shell *shell, t_ast_node *node, bool exec_in_child)
 	if (!args || !args[0])
 		return (0);
 	g_signal_received = 0;
-	signal(SIGINT, SIG_IGN);
+	if (exec_in_child)
+		signal(SIGINT, SIG_IGN);
 	builtin = is_buildin(args[0]);
 	if (builtin != NONE)
 		return (execute_buildin(shell, args, builtin));
